@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   合成大西瓜 · 单文件版（自动生成，请勿手改）
-  生成时间：2026/10/1 21:22:23
+  生成时间：2026/10/1 21:29:54
   来源：css/style.css + vendor/matter.min.js + js/config.js + js/assets-builtin.js + js/assets.js + js/boards.js + js/transport.js + js/sync.js + js/engine.js + js/render.js + js/ui.js + js/game.js
   重新生成：node tools/build-single.cjs
 -->
@@ -1249,7 +1249,7 @@ code {
           </div>
         </div>
         <div class="top-actions">
-          <span class="version" id="app-version">v0.1 设计预览</span>
+          <span class="version" id="app-version">v0.3</span>
           <button class="btn" id="btn-sound" type="button">🔊 音效</button>
           <button class="btn" id="btn-pause" type="button">⏸ 暂停</button>
           <button class="btn" id="btn-restart" type="button">↻ 重开</button>
@@ -1456,7 +1456,7 @@ code {
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  var VERSION = '0.2.0';
+  var VERSION = '0.3.0';
 
   /* 画布与场地（逻辑像素，渲染时按 devicePixelRatio 放大） */
   var BOARD = {
@@ -5623,7 +5623,7 @@ window.SUIKA_BUILTIN_ASSETS = {
         '按你的要求，每局成绩只进榜，不给玩家攒个人历史。';
     }
     if (dom.appVersion) {
-      dom.appVersion.textContent = 'v' + String(CFG.VERSION).split('-')[0] + (root.SUIKA_STANDALONE ? ' 单文件版' : ' 设计预览');
+      dom.appVersion.textContent = 'v' + String(CFG.VERSION).split('-')[0] + (root.SUIKA_STANDALONE ? ' 单文件版' : ' 全球榜');
     }
 
     syncDiffUi();

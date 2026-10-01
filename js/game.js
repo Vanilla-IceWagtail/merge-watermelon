@@ -1081,7 +1081,7 @@
         '按你的要求，每局成绩只进榜，不给玩家攒个人历史。';
     }
     if (dom.appVersion) {
-      dom.appVersion.textContent = 'v' + String(CFG.VERSION).split('-')[0] + (root.SUIKA_STANDALONE ? ' 单文件版' : ' 设计预览');
+      dom.appVersion.textContent = 'v' + String(CFG.VERSION).split('-')[0] + (root.SUIKA_STANDALONE ? ' 单文件版' : ' 全球榜');
     }
 
     syncDiffUi();
