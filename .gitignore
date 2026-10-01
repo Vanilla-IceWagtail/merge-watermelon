@@ -1,0 +1,8 @@
+# 本地服务器运行时产生的数据（排行榜），每个人自己的机器上一份，不进仓库
+data/
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
