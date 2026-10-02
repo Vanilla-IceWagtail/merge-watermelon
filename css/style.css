@@ -1,4 +1,4 @@
-/* 合成大西瓜 · 界面样式 */
+﻿/* 合成大西瓜 · 界面样式 */
 :root {
   --bg-0: #0d131b;
   --bg-1: #1a2531;
@@ -751,208 +751,6 @@ kbd {
   color: #a8e8c0;
 }
 
-/* ---------- 贴图工坊抽屉 ---------- */
-
-.drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(450px, 94vw);
-  background: linear-gradient(180deg, #151e29, #101822);
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.45);
-  transform: translateX(103%);
-  visibility: hidden;
-  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0.26s;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-}
-
-.drawer.is-open {
-  transform: none;
-  visibility: visible;
-}
-
-.drawer-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.drawer-head h2 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.drawer-sub {
-  margin: 3px 0 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.drawer-body {
-  padding: 14px 18px 26px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.drawer-intro {
-  font-size: 12.5px;
-  line-height: 1.75;
-  color: #b7c5d6;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 11px 13px;
-}
-
-.drawer-intro p {
-  margin: 0;
-}
-
-.drawer-intro b {
-  color: #8ef0b0;
-}
-
-code {
-  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
-  font-size: 11.5px;
-  background: rgba(255, 255, 255, 0.09);
-  padding: 1px 5px;
-  border-radius: 6px;
-}
-
-.drawer-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.asset-status {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.status-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  align-items: center;
-}
-
-.status-mode {
-  color: #a8e8c0;
-  font-weight: 600;
-}
-
-.status-note {
-  margin-top: 5px;
-  color: var(--accent-2);
-}
-
-.slots {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.slot {
-  display: grid;
-  grid-template-columns: 54px 1fr auto;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 11px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-.slot.is-drop {
-  border-color: rgba(53, 196, 106, 0.75);
-  background: rgba(53, 196, 106, 0.09);
-}
-
-.slot.has-custom {
-  border-color: rgba(53, 196, 106, 0.35);
-}
-
-.slot-preview {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 26px;
-  line-height: 1;
-  overflow: hidden;
-  box-shadow: inset 0 -3px 7px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-.slot-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.slot-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
-.slot-meta b {
-  font-size: 13.5px;
-}
-
-.slot-meta span {
-  font-size: 11.5px;
-  color: var(--muted);
-}
-
-.slot-src {
-  font-style: normal;
-  font-size: 11.5px;
-  color: #7fd8a3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.slot-btns {
-  display: flex;
-  gap: 6px;
-}
-
-.lock-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
-
-.scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(7, 11, 16, 0.55);
-  backdrop-filter: blur(2px);
-  z-index: 40;
-}
-
 /* ---------- 提示条 ---------- */
 
 .toast-wrap {
@@ -1219,4 +1017,469 @@ code {
   color: #06230f;
   font-weight: 700;
   background: linear-gradient(180deg, #7ef0a6, #35c46a);
+}
+
+/* ---------- 选图小窗口 ---------- */
+
+.pk-window {
+  position: fixed;
+  z-index: 90;
+  width: min(880px, calc(100vw - 48px));
+  max-height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #182231, #121a25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.pk-window.is-collapsed .pk-body,
+
+  display: none;
+}
+
+.pk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border-bottom: 1px solid var(--line);
+  cursor: move;
+  user-select: none;
+}
+
+.pk-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pk-subtitle {
+  font-size: 11.5px;
+  color: var(--muted);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-bar-actions {
+  display: flex;
+  gap: 6px;
+  cursor: default;
+}
+
+.pk-body {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.15fr);
+  gap: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (max-width: 780px) {
+  .pk-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pk-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 10px 12px;
+}
+
+.pk-col-slots {
+  border-right: 1px solid var(--line);
+}
+
+@media (max-width: 780px) {
+  .pk-col-slots {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+.pk-col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+}
+
+.pk-head-hint {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* 11 个水果位 */
+
+.pk-slots {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pk-slot {
+  display: grid;
+  grid-template-columns: 4px 64px 1fr auto auto;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pk-slot:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pk-slot.is-over {
+  border-color: var(--c);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pk-slot.is-flash {
+  animation: pkFlash 0.9s ease;
+}
+
+@keyframes pkFlash {
+  0% {
+    background: rgba(255, 255, 255, 0.35);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.pk-slot-color {
+  width: 4px;
+  height: 30px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--c), var(--e));
+}
+
+.pk-slot-thumb {
+  display: grid;
+  place-items: center;
+}
+
+.pk-slot-info {
+  min-width: 0;
+}
+
+.pk-slot-line1 {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.pk-slot-size {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pk-slot-line2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.pk-slot-file {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-slot-tag {
+  flex: none;
+  padding: 0 5px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #cfe0f0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pk-slot-tag.is-pick {
+  color: #06230f;
+  background: #7ef0a6;
+}
+
+.pk-slot-warn {
+  font-size: 10.5px;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+
+.pk-slot-clear {
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+
+.pk-slot-clear:hover {
+  color: #ffb3ba;
+  border-color: rgba(255, 95, 109, 0.5);
+}
+
+/* 图片库 */
+
+.pk-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.pk-group {
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.pk-group.is-on {
+  color: #06230f;
+  font-weight: 700;
+  background: linear-gradient(180deg, #7ef0a6, #35c46a);
+  border-color: transparent;
+}
+
+.pk-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.pk-tile {
+  position: relative;
+  border-radius: 12px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.pk-tile:hover {
+  transform: translateY(-2px);
+}
+
+.pk-tile.is-assigned {
+  border-style: solid;
+  border-color: var(--c);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pk-tile.is-selected {
+  outline: 2px solid #ffd166;
+  outline-offset: 1px;
+}
+
+.pk-tile.is-warn::after {
+  content: '⚠';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 12px;
+  color: var(--accent-2);
+}
+
+.pk-tile-pic {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 8px;
+  background: repeating-conic-gradient(#2a3340 0% 25%, #313b49 0% 50%) 50% / 12px 12px;
+}
+
+.pk-tile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.pk-tile-name {
+  font-size: 10.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-tile-size {
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pk-tile-badge {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.pk-empty {
+  grid-column: 1 / -1;
+  padding: 24px 14px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  line-height: 1.7;
+}
+
+
+/* 「还没选满」的提醒 */
+
+.pk-confirm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 12, 18, 0.62);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+}
+
+.pk-confirm-card {
+  width: min(360px, 88%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #1b2634, #141d28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
+}
+
+.pk-confirm-title {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--accent-2);
+}
+
+.pk-confirm-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.pk-confirm-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pk-subtitle.is-active {
+  color: #ffd166;
+}
+
+/*
+ * hidden 属性兜底：
+ * 只要元素自己带了 display（flex/grid），作者样式就会盖掉浏览器默认的
+ * [hidden] { display: none }，元素会「明明设了 hidden 却还显示」。
+ * （选图窗口的「还没选满」提醒就踩过这个坑。）
+ */
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- 手机 / 窄屏 ---------- */
+
+@media (max-width: 780px) {
+  /* 窗口里改成整块滚动，手机上不要两个小滚动区 */
+  .pk-body {
+    overflow-y: auto;
+  }
+
+  .pk-slots,
+  .pk-tiles {
+    overflow: visible;
+  }
+
+  .pk-col {
+    padding: 10px 10px 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pk-bar {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .pk-subtitle {
+    flex: 1 1 100%;
+    white-space: normal;
+    font-size: 11px;
+  }
+
+  .pk-bar-actions {
+    margin-left: auto;
+  }
+
+  /* 手机窄：水果位省掉一列，⚠ 提示并入 hover 说明 */
+  .pk-slot {
+    grid-template-columns: 4px 42px 1fr auto;
+    gap: 7px;
+    padding: 5px 7px;
+  }
+
+  .pk-slot-warn {
+    display: none;
+  }
+
+  .pk-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 6px;
+  }
+
+  .pk-tile-badge {
+    font-size: 9px;
+    padding: 0 4px;
+  }
+
+  .pk-confirm-card {
+    width: 92%;
+    padding: 14px;
+  }
 }

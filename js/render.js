@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · Canvas 渲染
  * 只负责画：场地、危险线、水果（贴图或默认 emoji 外观）、粒子与飘分特效。
  */
@@ -241,13 +241,88 @@
       ctx.fill();
     }
 
-    function drawFruit(body, assets) {
+    /** 轮廓圆的面积加权质心（和引擎里保持一致，用于「下一颗」预览） */
+    function comOf(circles) {
+      var sx = 0;
+      var sy = 0;
+      var sw = 0;
+      for (var i = 0; i < circles.length; i++) {
+        var c = circles[i];
+        var a = c.r * c.r;
+        sx += c.x * a;
+        sy += c.y * a;
+        sw += a;
+      }
+      if (!sw) return { x: 0, y: 0 };
+      return { x: sx / sw, y: sy / sw };
+    }
+
+    function drawFruit(body, assets, nowMs) {
       var def = CFG.tierByNumber(body.suikaTier);
       if (!def) return;
-      var r = body.circleRadius;
+      var r = body.circleRadius || def.r;
+      var shape = body.suikaShape;
+      var JELLY = (CFG.RULES && CFG.RULES.jelly) || {};
+      // 合成瞬间「弹出来」：新水果出生后 popMs 内从 1+popScale 缩到 1
+      var pop = 1;
+      if (body.suikaBornMs != null && nowMs) {
+        var age = nowMs - body.suikaBornMs;
+        if (age >= 0 && age < (JELLY.popMs || 220)) {
+          pop = 1 + (JELLY.popScale || 0.28) * (1 - age / (JELLY.popMs || 220));
+        }
+      }
+      // 挤压形变（纯渲染层：世界轴先压扁再自转，物理形状完全不变）
+      var sq = body.suikaSq || 0;
+      var sqA = body.suikaSqA || 0;
       ctx.save();
       ctx.translate(body.position.x, body.position.y);
+      if (Math.abs(sq) > 0.004) {
+        ctx.rotate(sqA);
+        ctx.scale(1 - sq, 1 + sq * (JELLY.stretch || 0.85));
+        ctx.rotate(-sqA);
+      }
       ctx.rotate(body.angle || 0);
+      r = r * pop;
+
+      if (shape) {
+        /*
+         * 玩偶：按整只的尺寸画（不再裁成圆形），并且跟着刚体一起转。
+         * 刚体的 position 是质心，图片中心在 -com*D 处，所以要挪回去。
+         */
+        var D = r * 2;
+        ctx.translate(-shape.com.x * D, -shape.com.y * D);
+        var dimg = assets ? assets.imageOf(body.suikaTier) : null;
+        // 脚下的小影子
+        ctx.beginPath();
+        if (ctx.ellipse) ctx.ellipse(0, D * 0.34, D * 0.33, D * 0.085, 0, 0, TAU);
+        else ctx.arc(0, D * 0.34, D * 0.14, 0, TAU);
+        ctx.fillStyle = 'rgba(70,40,20,0.13)';
+        ctx.fill();
+        if (dimg) {
+          var diw = dimg.naturalWidth;
+          var dih = dimg.naturalHeight;
+          var dsc = D / Math.max(diw, dih);
+          ctx.drawImage(dimg, (-diw * dsc) / 2, (-dih * dsc) / 2, diw * dsc, dih * dsc);
+        } else {
+          drawFruitShape(def, r);
+        }
+        // ?shapes=1 ：把真实碰撞体画出来（黄色圆组 = 物理引擎实际用的形状）
+        if (root.SUIKA_SHOW_SHAPES) {
+          for (var ci = 0; ci < shape.circles.length; ci++) {
+            var cc = shape.circles[ci];
+            ctx.beginPath();
+            ctx.arc(cc.x * D, cc.y * D, cc.r * D, 0, TAU);
+            ctx.fillStyle = 'rgba(255,170,40,0.20)';
+            ctx.fill();
+            ctx.lineWidth = Math.max(1, D * 0.006);
+            ctx.strokeStyle = 'rgba(255,209,102,0.95)';
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+        return;
+      }
+
       // 影子
       ctx.beginPath();
       ctx.arc(0, 0, r + 1.5, 0, TAU);
@@ -299,7 +374,15 @@
 
       ctx.save();
       ctx.globalAlpha = aim.ready ? 1 : 0.32;
-      var fake = { position: { x: x, y: y }, circleRadius: r, angle: 0, suikaTier: aim.tier };
+      var aimShape = assets && assets.shapeOf ? assets.shapeOf(aim.tier) : null;
+      var fake = {
+        position: { x: x, y: y },
+        circleRadius: r,
+        angle: 0,
+        suikaTier: aim.tier,
+        suikaShape: aimShape && aimShape.circles ? { circles: aimShape.circles, com: aimShape.com || null } : null
+      };
+      if (fake.suikaShape && !fake.suikaShape.com) fake.suikaShape.com = comOf(aimShape.circles);
       drawFruit(fake, assets);
       ctx.restore();
 
@@ -367,7 +450,7 @@
       roundRectPath(ctx, WT, WT, W - WT * 2, H - WT * 2, [0, 0, 22, 22]);
       ctx.clip();
       var list = frame.fruits || [];
-      for (var i = 0; i < list.length; i++) drawFruit(list[i], frame.assets);
+      for (var i = 0; i < list.length; i++) drawFruit(list[i], frame.assets, frame.elapsedMs || 0);
       drawAim(frame.aim, frame.assets);
       drawEffects();
       ctx.restore();

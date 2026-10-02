@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · 游戏核心（物理 + 合成 + 计分 + 判负）
  *
  * 这个文件完全不碰 DOM，只维护 Matter.js 世界和游戏状态，
@@ -44,6 +44,8 @@
     var floorY = H - WT;
 
     var difficulty = CFG.clampDifficulty(options.difficulty != null ? options.difficulty : CFG.DEFAULT_DIFFICULTY);
+    // 玩偶轮廓：给定等级返回 { circles:[{x,y,r}] }（归一化），没有就返回 null → 退回圆形碰撞
+    var shapeOf = typeof options.shapeOf === 'function' ? options.shapeOf : null;
     var engine = Engine.create({
       // 默认不开沉睡：见 config.js 里的说明（沉睡会让半空卡住的水果永远不掉）
       enableSleeping: options.enableSleeping != null ? options.enableSleeping : PH.enableSleeping
@@ -140,7 +142,7 @@
       if (hi <= lo) x = W / 2;
       else x = Math.min(hi, Math.max(lo, x));
 
-      var body = Bodies.circle(x, y, r, {
+      var opts = {
         label: 'fruit',
         restitution: PH.fruit.restitution,
         friction: PH.fruit.friction,
@@ -149,14 +151,57 @@
         density: PH.fruit.density,
         slop: PH.fruit.slop,
         sleepThreshold: 60
-      });
+      };
+
+      /*
+       * 有玩偶轮廓数据时，用「一组圆」拼出复合刚体（碰撞体积贴合玩偶），
+       * 没有就退回原来的单个圆（emoji 外观 / 没选图时）。
+       * 注意：复合刚体的 position 是**质心**，而图片是按几何中心画的，
+       * 所以这里把零件按 (c - com) 摆放，让质心正好落在 (x, y)，
+       * 渲染时再用 -com*D 把图片挪回去。
+       */
+      var shape = shapeOf ? shapeOf(tierNum) : null;
+      var body;
+      if (shape && shape.circles && shape.circles.length > 1) {
+        var D = r * 2;
+        var com = shapeCom(shape.circles);
+        var parts = [];
+        for (var i = 0; i < shape.circles.length; i++) {
+          var c = shape.circles[i];
+          parts.push(Bodies.circle(x + (c.x - com.x) * D, y + (c.y - com.y) * D, Math.max(1.2, c.r * D), opts));
+        }
+        body = Body.create(Object.assign({}, opts, { parts: parts }));
+        body.suikaShape = { circles: shape.circles, com: com };
+        body.circleRadius = r; // 其余逻辑（危险线、边界兜底、渲染尺寸）都还用这个半径
+      } else {
+        body = Bodies.circle(x, y, r, opts);
+      }
       body.suikaTier = tierNum;
       body.suikaAboveMs = 0;
       body.suikaDead = false;
       body.suikaRemoved = false;
       body.suikaBornMs = state.elapsedMs;
+      body.suikaSq = 0; // 挤压形变量（渲染用）
+      body.suikaSqA = 0; // 挤压轴角度
+      body.suikaSqV = 0; // 形变速度（弹簧-阻尼用）
       Composite.add(world, body);
       return body;
+    }
+
+    /** 轮廓圆的面积加权质心（= 这个复合刚体的质心） */
+    function shapeCom(circles) {
+      var sx = 0;
+      var sy = 0;
+      var sw = 0;
+      for (var i = 0; i < circles.length; i++) {
+        var c = circles[i];
+        var area = c.r * c.r;
+        sx += c.x * area;
+        sy += c.y * area;
+        sw += area;
+      }
+      if (!sw) return { x: 0, y: 0 };
+      return { x: sx / sw, y: sy / sw };
     }
 
     /** 当前场上还活着的水果（排除正在合并中的两颗） */
@@ -192,13 +237,86 @@
       return body;
     }
 
+    /* ---------------- 果冻手感（回弹阈值 + 挤压形变） ---------------- */
+    var JELLY = (CFG.RULES && CFG.RULES.jelly) || {};
+
+    /**
+     * 处理一次接触对：
+     *   · 法向接近速度低于阈值 → 把这一对的弹性清零（堆叠静止时不微弹）
+     *   · 高于阈值 → 记下碰撞前速度，并给两颗水果注入挤压形变
+     */
+    function applyJelly(pair, a, b) {
+      var col = pair.collision;
+      if (!col || !col.normal) return;
+      var nx = col.normal.x;
+      var ny = col.normal.y;
+      var vax = a.velocity ? a.velocity.x : 0;
+      var vay = a.velocity ? a.velocity.y : 0;
+      var vbx = b.velocity ? b.velocity.x : 0;
+      var vby = b.velocity ? b.velocity.y : 0;
+      var vn = Math.abs((vax - vbx) * nx + (vay - vby) * ny);
+      if (vn < (JELLY.bounceThreshold || 0.92)) {
+        pair.restitution = 0; // 慢速贴住 → 不弹（Matter 没有内置阈值，这里补上）
+        return;
+      }
+      squash(a, nx, ny, vn);
+      squash(b, -nx, -ny, vn);
+    }
+
+    /** 沿撞击法线压扁（渲染时施加），只接受更强的撞击，避免连续接触反复顶起 */
+    function squash(body, nx, ny, vn) {
+      if (body.suikaTier == null) return;
+      var k = Math.min(JELLY.squashMax || 0.3, vn / (JELLY.speedScale || 25));
+      if (k <= (body.suikaSq || 0)) return;
+      body.suikaSq = k;
+      body.suikaSqA = Math.atan2(ny, nx);
+      body.suikaSqV = 0; // 新撞击：从"被压扁"这一刻重新开始回弹
+    }
+
+    /**
+     * 形变的恢复：二阶弹簧-阻尼（会过冲 + 回摆），按固定步长积分，跟帧率无关。
+     * 压扁 → 弹回 → 弹过头（微微拉长）→ 回摆 → 停住，晃 1~2 下，像果冻。
+     */
+    function decaySquash(dtMs) {
+      var dt = dtMs / 1000;
+      var k = JELLY.springK || 120;
+      var c = JELLY.springC || 11;
+      var maxSq = JELLY.squashMax || 0.3;
+      var minSq = -(JELLY.stretchMax || 0.18);
+      var all = Composite.allBodies(world);
+      for (var i = 0; i < all.length; i++) {
+        var b = all[i];
+        var sq = b.suikaSq || 0;
+        var v = b.suikaSqV || 0;
+        if (sq === 0 && v === 0) continue;
+        v += (-k * sq - c * v) * dt;
+        sq += v * dt;
+        if (sq > maxSq) {
+          sq = maxSq;
+          v = Math.min(v, 0);
+        } else if (sq < minSq) {
+          sq = minSq;
+          v = Math.max(v, 0);
+        }
+        if (Math.abs(sq) < 0.0015 && Math.abs(v) < 0.02) {
+          b.suikaSq = 0;
+          b.suikaSqV = 0;
+        } else {
+          b.suikaSq = sq;
+          b.suikaSqV = v;
+        }
+      }
+    }
+
     /* ---------------- 合成 ---------------- */
 
     Events.on(engine, 'collisionStart', function (evt) {
       var pairs = evt.pairs;
       for (var i = 0; i < pairs.length; i++) {
-        var a = pairs[i].bodyA;
-        var b = pairs[i].bodyB;
+        // 复合刚体（玩偶轮廓）碰撞时报的是「零件」，要取回父体
+        var a = pairs[i].bodyA.parent || pairs[i].bodyA;
+        var b = pairs[i].bodyB.parent || pairs[i].bodyB;
+        applyJelly(pairs[i], a, b);
         if (a.suikaTier == null || b.suikaTier == null) continue;
         if (a.suikaDead || b.suikaDead || a.suikaRemoved || b.suikaRemoved) continue;
         if (a.suikaTier !== b.suikaTier) continue;
@@ -209,6 +327,15 @@
       }
     });
 
+    // 持续接触也要处理：果堆被压时下面那几颗会跟着形变（慢速贴住时上面那条阈值会拦住，不会自激）
+    Events.on(engine, 'collisionActive', function (evt) {
+      var pairs = evt.pairs;
+      for (var i = 0; i < pairs.length; i++) {
+        var a = pairs[i].bodyA.parent || pairs[i].bodyA;
+        var b = pairs[i].bodyB.parent || pairs[i].bodyB;
+        applyJelly(pairs[i], a, b);
+      }
+    });
     function flushMerges() {
       if (!pendingMerges.length) return;
       var queue = pendingMerges;
@@ -396,6 +523,7 @@
       var steps = 0;
       while (accumulator >= BOARD.fixedStep && steps < BOARD.stepsPerFrame) {
         Engine.update(engine, BOARD.fixedStep);
+        decaySquash(BOARD.fixedStep);
         flushMerges();
         accumulator -= BOARD.fixedStep;
         steps += 1;

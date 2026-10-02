@@ -1,8 +1,8 @@
 <!doctype html>
 <!--
   合成大西瓜 · 单文件版（自动生成，请勿手改）
-  生成时间：2026/10/1 21:29:54
-  来源：css/style.css + vendor/matter.min.js + js/config.js + js/assets-builtin.js + js/assets.js + js/boards.js + js/transport.js + js/sync.js + js/engine.js + js/render.js + js/ui.js + js/game.js
+  生成时间：2026/10/2 11:27:56
+  来源：css/style.css + vendor/matter.min.js + js/config.js + js/library.js + js/assets-builtin.js + js/assets.js + js/boards.js + js/transport.js + js/sync.js + js/engine.js + js/render.js + js/ui.js + js/picker.js + js/game.js
   重新生成：node tools/build-single.cjs
 -->
 <html lang="zh-CN">
@@ -13,7 +13,7 @@
     <title>合成大西瓜 · 单文件版</title>
 <style>
 /* ===== css/style.css ===== */
-/* 合成大西瓜 · 界面样式 */
+﻿/* 合成大西瓜 · 界面样式 */
 :root {
   --bg-0: #0d131b;
   --bg-1: #1a2531;
@@ -766,208 +766,6 @@ kbd {
   color: #a8e8c0;
 }
 
-/* ---------- 贴图工坊抽屉 ---------- */
-
-.drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(450px, 94vw);
-  background: linear-gradient(180deg, #151e29, #101822);
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.45);
-  transform: translateX(103%);
-  visibility: hidden;
-  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0.26s;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-}
-
-.drawer.is-open {
-  transform: none;
-  visibility: visible;
-}
-
-.drawer-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.drawer-head h2 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.drawer-sub {
-  margin: 3px 0 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.drawer-body {
-  padding: 14px 18px 26px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.drawer-intro {
-  font-size: 12.5px;
-  line-height: 1.75;
-  color: #b7c5d6;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 11px 13px;
-}
-
-.drawer-intro p {
-  margin: 0;
-}
-
-.drawer-intro b {
-  color: #8ef0b0;
-}
-
-code {
-  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
-  font-size: 11.5px;
-  background: rgba(255, 255, 255, 0.09);
-  padding: 1px 5px;
-  border-radius: 6px;
-}
-
-.drawer-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.asset-status {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.status-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  align-items: center;
-}
-
-.status-mode {
-  color: #a8e8c0;
-  font-weight: 600;
-}
-
-.status-note {
-  margin-top: 5px;
-  color: var(--accent-2);
-}
-
-.slots {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.slot {
-  display: grid;
-  grid-template-columns: 54px 1fr auto;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 11px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-.slot.is-drop {
-  border-color: rgba(53, 196, 106, 0.75);
-  background: rgba(53, 196, 106, 0.09);
-}
-
-.slot.has-custom {
-  border-color: rgba(53, 196, 106, 0.35);
-}
-
-.slot-preview {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 26px;
-  line-height: 1;
-  overflow: hidden;
-  box-shadow: inset 0 -3px 7px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-.slot-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.slot-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
-.slot-meta b {
-  font-size: 13.5px;
-}
-
-.slot-meta span {
-  font-size: 11.5px;
-  color: var(--muted);
-}
-
-.slot-src {
-  font-style: normal;
-  font-size: 11.5px;
-  color: #7fd8a3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.slot-btns {
-  display: flex;
-  gap: 6px;
-}
-
-.lock-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
-
-.scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(7, 11, 16, 0.55);
-  backdrop-filter: blur(2px);
-  z-index: 40;
-}
-
 /* ---------- 提示条 ---------- */
 
 .toast-wrap {
@@ -1236,6 +1034,471 @@ code {
   background: linear-gradient(180deg, #7ef0a6, #35c46a);
 }
 
+/* ---------- 选图小窗口 ---------- */
+
+.pk-window {
+  position: fixed;
+  z-index: 90;
+  width: min(880px, calc(100vw - 48px));
+  max-height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #182231, #121a25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.pk-window.is-collapsed .pk-body,
+
+  display: none;
+}
+
+.pk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border-bottom: 1px solid var(--line);
+  cursor: move;
+  user-select: none;
+}
+
+.pk-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pk-subtitle {
+  font-size: 11.5px;
+  color: var(--muted);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-bar-actions {
+  display: flex;
+  gap: 6px;
+  cursor: default;
+}
+
+.pk-body {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.15fr);
+  gap: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (max-width: 780px) {
+  .pk-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pk-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 10px 12px;
+}
+
+.pk-col-slots {
+  border-right: 1px solid var(--line);
+}
+
+@media (max-width: 780px) {
+  .pk-col-slots {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+.pk-col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+}
+
+.pk-head-hint {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* 11 个水果位 */
+
+.pk-slots {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pk-slot {
+  display: grid;
+  grid-template-columns: 4px 64px 1fr auto auto;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pk-slot:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pk-slot.is-over {
+  border-color: var(--c);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pk-slot.is-flash {
+  animation: pkFlash 0.9s ease;
+}
+
+@keyframes pkFlash {
+  0% {
+    background: rgba(255, 255, 255, 0.35);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.pk-slot-color {
+  width: 4px;
+  height: 30px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--c), var(--e));
+}
+
+.pk-slot-thumb {
+  display: grid;
+  place-items: center;
+}
+
+.pk-slot-info {
+  min-width: 0;
+}
+
+.pk-slot-line1 {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.pk-slot-size {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pk-slot-line2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.pk-slot-file {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-slot-tag {
+  flex: none;
+  padding: 0 5px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #cfe0f0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pk-slot-tag.is-pick {
+  color: #06230f;
+  background: #7ef0a6;
+}
+
+.pk-slot-warn {
+  font-size: 10.5px;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+
+.pk-slot-clear {
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+
+.pk-slot-clear:hover {
+  color: #ffb3ba;
+  border-color: rgba(255, 95, 109, 0.5);
+}
+
+/* 图片库 */
+
+.pk-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.pk-group {
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.pk-group.is-on {
+  color: #06230f;
+  font-weight: 700;
+  background: linear-gradient(180deg, #7ef0a6, #35c46a);
+  border-color: transparent;
+}
+
+.pk-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.pk-tile {
+  position: relative;
+  border-radius: 12px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.pk-tile:hover {
+  transform: translateY(-2px);
+}
+
+.pk-tile.is-assigned {
+  border-style: solid;
+  border-color: var(--c);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pk-tile.is-selected {
+  outline: 2px solid #ffd166;
+  outline-offset: 1px;
+}
+
+.pk-tile.is-warn::after {
+  content: '⚠';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 12px;
+  color: var(--accent-2);
+}
+
+.pk-tile-pic {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 8px;
+  background: repeating-conic-gradient(#2a3340 0% 25%, #313b49 0% 50%) 50% / 12px 12px;
+}
+
+.pk-tile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.pk-tile-name {
+  font-size: 10.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-tile-size {
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pk-tile-badge {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.pk-empty {
+  grid-column: 1 / -1;
+  padding: 24px 14px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  line-height: 1.7;
+}
+
+
+/* 「还没选满」的提醒 */
+
+.pk-confirm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 12, 18, 0.62);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+}
+
+.pk-confirm-card {
+  width: min(360px, 88%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #1b2634, #141d28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
+}
+
+.pk-confirm-title {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--accent-2);
+}
+
+.pk-confirm-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.pk-confirm-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pk-subtitle.is-active {
+  color: #ffd166;
+}
+
+/*
+ * hidden 属性兜底：
+ * 只要元素自己带了 display（flex/grid），作者样式就会盖掉浏览器默认的
+ * [hidden] { display: none }，元素会「明明设了 hidden 却还显示」。
+ * （选图窗口的「还没选满」提醒就踩过这个坑。）
+ */
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- 手机 / 窄屏 ---------- */
+
+@media (max-width: 780px) {
+  /* 窗口里改成整块滚动，手机上不要两个小滚动区 */
+  .pk-body {
+    overflow-y: auto;
+  }
+
+  .pk-slots,
+  .pk-tiles {
+    overflow: visible;
+  }
+
+  .pk-col {
+    padding: 10px 10px 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pk-bar {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .pk-subtitle {
+    flex: 1 1 100%;
+    white-space: normal;
+    font-size: 11px;
+  }
+
+  .pk-bar-actions {
+    margin-left: auto;
+  }
+
+  /* 手机窄：水果位省掉一列，⚠ 提示并入 hover 说明 */
+  .pk-slot {
+    grid-template-columns: 4px 42px 1fr auto;
+    gap: 7px;
+    padding: 5px 7px;
+  }
+
+  .pk-slot-warn {
+    display: none;
+  }
+
+  .pk-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 6px;
+  }
+
+  .pk-tile-badge {
+    font-size: 9px;
+    padding: 0 4px;
+  }
+
+  .pk-confirm-card {
+    width: 92%;
+    padding: 14px;
+  }
+}
+
 </style>
 </head>
   <body>
@@ -1253,7 +1516,7 @@ code {
           <button class="btn" id="btn-sound" type="button">🔊 音效</button>
           <button class="btn" id="btn-pause" type="button">⏸ 暂停</button>
           <button class="btn" id="btn-restart" type="button">↻ 重开</button>
-          <button class="btn btn-primary" id="btn-workshop" type="button">🖼 贴图工坊</button>
+          <button class="btn btn-primary" id="btn-picker" type="button">🖼 选图</button>
         </div>
       </header>
 
@@ -1369,49 +1632,7 @@ code {
       </main>
     </div>
 
-    <!-- 贴图工坊 -->
-    <aside class="drawer" id="drawer" aria-label="水果贴图工坊">
-      <header class="drawer-head">
-        <div>
-          <h2>🖼 水果贴图工坊</h2>
-          <p class="drawer-sub">给 11 级水果各配一张图片，随时可以换</p>
-        </div>
-        <button class="btn btn-mini btn-ghost" id="drawer-close" type="button">关闭</button>
-      </header>
-      <div class="drawer-body">
-        <div class="drawer-intro">
-          <p>
-            <b>第一步</b>：给每一级水果选一张图片（点「选图片」，或把图片直接拖到对应格子上）。<br />
-            <b>第二步</b>：批量导入时文件名带序号或水果名就能自动分配，例如
-            <code>01-cherry.png</code>、<code>02.png</code>、<code>葡萄.webp</code>。<br />
-            <b>第三步</b>：点「导出贴图包」下载 <code>.json</code>，把它发给我；我把它内嵌进最终版，
-            之后游戏固定使用这套图片，导入功能自动关闭，图片就不可再改了。
-          </p>
-        </div>
-
-        <div class="drawer-actions">
-          <button class="btn" id="btn-batch" type="button">批量导入</button>
-          <button class="btn" id="btn-import-pack" type="button">导入贴图包</button>
-          <button class="btn btn-primary" id="btn-export-pack" type="button">⬇ 导出贴图包</button>
-          <button class="btn btn-ghost" id="btn-clear-assets" type="button">全部清除</button>
-        </div>
-
-        <div class="asset-status" id="asset-status"></div>
-        <ol class="slots" id="slots"></ol>
-
-        <div class="lock-row">
-          <button class="btn" id="btn-lock" type="button">🔒 标记为最终贴图</button>
-          <span class="muted">只是打个标记；真正的「不可再改」是整合进最终版之后</span>
-        </div>
-      </div>
-    </aside>
-    <div class="scrim" id="scrim" hidden></div>
-
     <div class="toast-wrap" id="toast-wrap"></div>
-
-    <input type="file" id="file-slot" accept="image/*" hidden />
-    <input type="file" id="file-batch" accept="image/*" multiple hidden />
-    <input type="file" id="file-pack" accept=".json,application/json" hidden />
 
     <script>
       window.SUIKA_STANDALONE = true; // 单文件版标记（由 tools/build-single.cjs 注入）
@@ -1445,7 +1666,7 @@ code {
 </script>
 <script>
 /* ===== js/config.js ===== */
-/*!
+﻿/*!
  * 合成大西瓜 · 基础配置
  * 纯数据 + 纯函数，不依赖 DOM，可以直接在 node 下 require 做逻辑测试。
  * 想改水果顺序 / 半径 / 分值 / 难度 / 物理手感，只改这一个文件就够了。
@@ -1456,7 +1677,7 @@ code {
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  var VERSION = '0.3.0';
+  var VERSION = '0.4.0';
 
   /* 画布与场地（逻辑像素，渲染时按 devicePixelRatio 放大） */
   var BOARD = {
@@ -1483,7 +1704,7 @@ code {
      */
     enableSleeping: false,
     fruit: {
-      restitution: 0.12,
+      restitution: 0.42,
       // 摩擦调小：圆水果之间应该互相打滑滚开，而不是像粘在一起
       friction: 0.1,
       frictionStatic: 0.16,
@@ -1527,7 +1748,43 @@ code {
      * 倍率 = 1 + (连击数-1) * step，最高 maxMultiplier；
      * 实际加成取「倍率加成」和「每连击 +1 分」里更大的那个（保证小水果连击也有收益）。
      */
-    combo: { windowMs: 1000, step: 0.3, maxMultiplier: 2.5 }
+    combo: { windowMs: 1000, step: 0.3, maxMultiplier: 2.5 },
+
+    /*
+     * 果冻手感（QQ 弹弹）。
+     *
+     * 参考了 BigNaiWa（yhsome.github.io/BigNaiWa）的做法 —— 它把"果冻感"拆成两层，
+     * 两层互不干扰，所以既弹又稳：
+     *   ① 回弹：由 restitution 决定；但**低于 bounceThreshold 的接触完全不给弹性**，
+     *      这样堆叠静止时不会一直微弹（这是堆子"稳"的关键）。
+     *   ② 挤压形变：纯渲染层。刚体形状全程不变，只在画的时候沿撞击法线压扁、垂直方向拉长，
+     *      然后指数衰减。做成渲染层的好处是：物理绝不会被形变带得自激抖动。
+     *
+     * 单位说明：Matter.js 的速度是「像素/步」（60 步 = 1 秒），
+     * BigNaiWa 用像素/秒，所以它的 1500 对应我们这里 1500/60 = 25；
+     * 它的 55px/s 静止阈值对应 55/60 ≈ 0.92。
+     */
+    jelly: {
+      restitution: 0.42, // 球球弹性（它 0.38、墙地 0.45，取中间值）
+      bounceThreshold: 0.92, // 低于这个法向接近速度就不给弹性、也不算挤压
+      squashMax: 0.3, // 最大压扁比例（法线方向缩到 70%）
+      speedScale: 25, // k = 撞速 / speedScale，到这个速度就压满
+      squashDecay: 9, // 每秒衰减系数，τ≈111ms
+      stretch: 0.85, // 垂直方向的拉伸系数（拉伸略小于压缩）
+      popScale: 0.28, // 合成瞬间"弹出来"的放大比例
+      popMs: 220, // 弹出动画时长
+      /*
+       * 形变用**二阶弹簧-阻尼**（不是一条指数衰减）：
+       *   sqV += (-springK * sq - springC * sqV) * dt
+       *   sq  += sqV * dt
+       * 这样压扁之后会弹过头（变成微微拉长）、再回摆，晃 1~2 下停住 —— 更像果冻。
+       * springK=120 → ω≈11 rad/s（周期 ≈0.57s）；springC=11 → 阻尼比 ζ≈0.5（欠阻尼，过冲约 16%）。
+       * 显式欧拉在 dt=1/60 下 ω·dt≈0.18，稳定。
+       */
+      springK: 120,
+      springC: 11,
+      stretchMax: 0.18 // 反向（拉长）时的上限，避免晃得太夸张
+    }
   };
 
   /* 难度：1~10 级，默认第 5 级（比原来的 4 级难一档） */
@@ -1659,7 +1916,7 @@ code {
     return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  /** 给贴图工坊用的建议文件名，例如 01-cherry.png */
+  /** 建议的文件名，例如 01-cherry.png（内嵌图库时按这个给图片起名最省事） */
   function suggestFileName(t) {
     return (t.tier < 10 ? '0' + t.tier : '' + t.tier) + '-' + t.key + '.png';
   }
@@ -1691,43 +1948,333 @@ code {
 
 </script>
 <script>
+/* ===== js/library.js ===== */
+/*!
+ * 合成大西瓜 · 图片库（纯函数）
+ *
+ * 图片不再是「用户自己导入」，而是**内嵌在游戏里的一个图库**（`js/assets-builtin.js` 里的
+ * `window.SUIKA_IMAGE_LIBRARY`），用户在「选图小窗口」里从图库里挑 11 张，分别放到 11 个水果位上。
+ *
+ * 图库结构：
+ *   {
+ *     version: 1,
+ *     builtAt: '2026-01-01T00:00:00.000Z',
+ *     groups:  [ { id:'g1', name:'第一组', desc:'给你看的分组说明' }, ... ],   // 分组由你（用户）来定
+ *     images:  [ { id:'i01', file:'01-cherry.png', group:'g1', w:512, h:512, src:'data:image/webp;base64,...' }, ... ],
+ *     defaults:{ '1':'i01', '2':'i02', ... }   // 默认图像：开局就用这几张，用户可以在窗口里换
+ *   }
+ *
+ * 用户当前的选择存在浏览器本地（`suika.pick.v1`）：{ '1':'i07', ... }，换图不影响图库本身。
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(root);
+  else root.SuikaLibrary = factory(root);
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
+  'use strict';
+
+  function tryRequire(path) {
+    if (typeof require !== 'function') return null;
+    try {
+      return require(path);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  var CFG = root.SuikaConfig || tryRequire('./config.js');
+
+  var TIER_COUNT = 11;
+
+  function emptyLibrary() {
+    return { version: 0, builtAt: null, fingerprint: '--------', groups: [], images: [], defaults: {} };
+  }
+
+  function isDataImage(s) {
+    return typeof s === 'string' && /^data:image\/(png|jpe?g|webp|gif|avif|bmp);base64,/i.test(s);
+  }
+
+  /** 图片库指纹：同一套图得到同样的 16 位指纹（用来确认「就是这个版本」） */
+  function fingerprint(images) {
+    var str = '';
+    var list = (images || []).slice().sort(function (a, b) {
+      return String(a.id).localeCompare(String(b.id));
+    });
+    for (var i = 0; i < list.length; i++) {
+      str += list[i].id + '|' + (list[i].file || '') + '|' + String(list[i].src || '').length + '\n';
+    }
+    if (!str) return '--------';
+    function fnv(text, seed) {
+      var h = seed >>> 0;
+      for (var i = 0; i < text.length; i++) {
+        h ^= text.charCodeAt(i);
+        h = Math.imul(h, 16777619) >>> 0;
+      }
+      return ('00000000' + h.toString(16)).slice(-8);
+    }
+    return fnv(str, 2166136261) + fnv(str, 16777619);
+  }
+
+  function clampInt(v, min, max, fallback) {
+    var n = Math.floor(Number(v));
+    if (!isFinite(n)) return fallback;
+    return Math.min(max, Math.max(min, n));
+  }
+
+  /** 把外部数据洗成合法图库：id 唯一、分组存在、src 必须是内联图片 */
+  function normalize(raw) {
+    if (!raw || typeof raw !== 'object') return emptyLibrary();
+    var groups = [];
+    var groupIds = {};
+    var rawGroups = Array.isArray(raw.groups) ? raw.groups : [];
+    for (var i = 0; i < rawGroups.length; i++) {
+      var g = rawGroups[i];
+      if (!g || typeof g !== 'object') continue;
+      var gid = String(g.id || 'g' + (i + 1));
+      if (groupIds[gid]) continue;
+      groupIds[gid] = true;
+      groups.push({ id: gid, name: String(g.name || gid), desc: String(g.desc || '') });
+    }
+
+    var images = [];
+    var seen = {};
+    var rawImages = Array.isArray(raw.images) ? raw.images : [];
+    for (var j = 0; j < rawImages.length; j++) {
+      var it = rawImages[j];
+      if (!it || typeof it !== 'object') continue;
+      if (!isDataImage(it.src)) continue;
+      var id = String(it.id || 'i' + (j + 1));
+      if (seen[id]) continue;
+      seen[id] = true;
+      images.push({
+        id: id,
+        file: String(it.file || id),
+        group: groupIds[String(it.group)] ? String(it.group) : groups.length ? groups[0].id : 'default',
+        w: clampInt(it.w, 1, 8192, 0) || 0,
+        h: clampInt(it.h, 1, 8192, 0) || 0,
+        note: String(it.note || ''),
+        src: it.src
+      });
+    }
+    // 有图但没有分组时，补一个「未分组」，保证界面永远有东西可选
+    if (images.length && !groups.length) {
+      groups.push({ id: 'default', name: '未分组', desc: '' });
+      images.forEach(function (img) {
+        img.group = 'default';
+      });
+    }
+
+    var defaults = {};
+    var rawDefaults = raw.defaults && typeof raw.defaults === 'object' ? raw.defaults : {};
+    Object.keys(rawDefaults).forEach(function (k) {
+      var tier = Math.round(Number(k));
+      if (!(tier >= 1 && tier <= TIER_COUNT)) return;
+      var imgId = String(rawDefaults[k]);
+      if (seen[imgId]) defaults[tier] = imgId;
+    });
+    // 没给默认图就按顺序自动铺满，省得开局一批空位
+    if (!Object.keys(defaults).length && images.length) {
+      for (var t = 1; t <= TIER_COUNT; t++) {
+        var pick = images[(t - 1) % images.length];
+        if (pick) defaults[t] = pick.id;
+      }
+    }
+
+    return {
+      version: clampInt(raw.version, 0, 999, 1),
+      builtAt: raw.builtAt ? String(raw.builtAt) : null,
+      fingerprint: raw.fingerprint ? String(raw.fingerprint) : fingerprint(images),
+      groups: groups,
+      images: images,
+      defaults: defaults
+    };
+  }
+
+  function byId(lib, id) {
+    var list = (lib && lib.images) || [];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === id) return list[i];
+    }
+    return null;
+  }
+
+  function groupsOf(lib) {
+    var groups = (lib && lib.groups) || [];
+    var images = (lib && lib.images) || [];
+    return groups.map(function (g) {
+      return {
+        id: g.id,
+        name: g.name,
+        desc: g.desc,
+        count: images.filter(function (im) {
+          return im.group === g.id;
+        }).length
+      };
+    });
+  }
+
+  function imagesOf(lib, groupId) {
+    var images = (lib && lib.images) || [];
+    if (!groupId || groupId === '*') return images.slice();
+    return images.filter(function (im) {
+      return im.group === groupId;
+    });
+  }
+
+  /** 用户选择里指向已不存在的图片时丢掉（图库换版本之后不会错位） */
+  function sanitizePick(lib, pick) {
+    var out = {};
+    if (!pick || typeof pick !== 'object') return out;
+    Object.keys(pick).forEach(function (k) {
+      var tier = Math.round(Number(k));
+      if (!(tier >= 1 && tier <= TIER_COUNT)) return;
+      var imgId = String(pick[k]);
+      if (byId(lib, imgId)) out[tier] = imgId;
+    });
+    return out;
+  }
+
+  /** 某一级最终用哪张图：用户选的优先，其次默认图 */
+  function resolve(lib, pick, tier) {
+    var t = Math.round(Number(tier));
+    if (!(t >= 1 && t <= TIER_COUNT)) return null;
+    var clean = sanitizePick(lib, pick);
+    var id = clean[t] || ((lib && lib.defaults) || {})[t];
+    return id ? byId(lib, id) : null;
+  }
+
+  /** 11 个水果位：颜色 / 名字 / 直径 / 得分 —— 窗口里的槽位和图例都用它 */
+  function slots() {
+    var tiers = (CFG ? CFG.TIERS : []) || [];
+    return tiers.map(function (t) {
+      return {
+        tier: t.tier,
+        name: t.name,
+        emoji: t.emoji,
+        color: t.color,
+        edge: t.edge,
+        diameter: t.r * 2,
+        radius: t.r,
+        score: t.score,
+        // 想让图看起来清楚，图片最长边最好是直径的 2 倍以上
+        wantedEdge: t.r * 4
+      };
+    });
+  }
+
+  function slotOf(tier) {
+    var list = slots();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].tier === Math.round(Number(tier))) return list[i];
+    }
+    return null;
+  }
+
+  /**
+   * 尺寸质量提示：这张图放到这一级够不够清楚。
+   * 图片在游戏里是按圆形等比铺满的，边太小的图放大会糊。
+   */
+  function qualityHint(img, tier) {
+    var slot = slotOf(tier);
+    if (!img || !slot) return null;
+    var edge = Math.max(Number(img.w) || 0, Number(img.h) || 0);
+    if (!edge) return { ok: true, ratio: 0, text: '尺寸未知' };
+    var ratio = edge / slot.wantedEdge;
+    if (ratio >= 1) return { ok: true, ratio: ratio, text: '清晰度足够' };
+    if (ratio >= 0.6) return { ok: true, ratio: ratio, text: '略小，能用' };
+    return { ok: false, ratio: ratio, text: '偏小，放大后会糊' };
+  }
+
+  function stats(lib) {
+    var images = (lib && lib.images) || [];
+    var bytes = images.reduce(function (n, im) {
+      return n + Math.floor(String(im.src || '').length * 0.75);
+    }, 0);
+    return {
+      groups: ((lib && lib.groups) || []).length,
+      images: images.length,
+      bytes: bytes,
+      fingerprint: (lib && lib.fingerprint) || '--------',
+      builtAt: (lib && lib.builtAt) || null,
+      defaults: Object.keys((lib && lib.defaults) || {}).length
+    };
+  }
+
+  /** 哪些水果位还没图（1 起的等级数组）；用来提示「还没选满 11 张」 */
+  function missingSlots(lib, pick) {
+    var out = [];
+    for (var t = 1; t <= TIER_COUNT; t++) {
+      if (!resolve(lib, pick, t)) out.push(t);
+    }
+    return out;
+  }
+
+  /** 选满了没有（图库是空的就不算「没选满」，免得一直弹提示） */
+  function isComplete(lib, pick) {
+    if (!lib || !(lib.images || []).length) return true;
+    return missingSlots(lib, pick).length === 0;
+  }
+
+  return {
+    TIER_COUNT: TIER_COUNT,
+    emptyLibrary: emptyLibrary,
+    normalize: normalize,
+    fingerprint: fingerprint,
+    isDataImage: isDataImage,
+    byId: byId,
+    groupsOf: groupsOf,
+    imagesOf: imagesOf,
+    sanitizePick: sanitizePick,
+    resolve: resolve,
+    slots: slots,
+    slotOf: slotOf,
+    qualityHint: qualityHint,
+    stats: stats,
+    missingSlots: missingSlots,
+    isComplete: isComplete
+  };
+});
+
+</script>
+<script>
 /* ===== js/assets-builtin.js ===== */
 /*!
- * 合成大西瓜 · 最终内嵌贴图（占位）
+ * 合成大西瓜 · 内嵌图片库（占位，等你的图片）
  *
- * 这个文件现在是空的，所有水果都用默认 emoji 外观。
- * 等你在「贴图工坊」里导好图片并导出贴图包交给我之后，
- * 我会把图片以 base64 的形式填进 slots、把 locked 改成 true、写上 integratedAt，
- * 之后游戏固定使用内嵌图片，界面上的导入功能会自动关闭 —— 图片就不可再改了。
+ * 这里就是「图片库」本体：游戏不带任何导入功能，图片全部内嵌在这个文件里，
+ * 用户在「选图小窗口」里从图库里挑 11 张放到 11 个水果位上。
  *
- * 结构示例（tier 为 1~11）：
- *   window.SUIKA_BUILTIN_ASSETS = {
- *     packVersion: 1,
- *     locked: true,
- *     integratedAt: '2025-01-01T00:00:00.000Z',
- *     fingerprint: '0123456789abcdef',
- *     slots: { 1: { dataUrl: 'data:image/webp;base64,...', file: '01-cherry.webp' }, ... }
- *   };
+ * 现在图库是空的（游戏用 emoji 默认外观）。等你把图片交给我之后，我会：
+ *   1. 把每张图压缩成 WebP 并转成 base64，填进 images；
+ *   2. 按你的说明填好 groups（分组）和每张图的 group；
+ *   3. 把你指定的那几张默认图填进 defaults（{ '1':'i01', ... } 表示第 1 级默认用 i01）；
+ *   4. 写上 builtAt 和 fingerprint（指纹）。
+ *
+ * images 里每张图的字段：
+ *   { id:'i01', file:'01-cherry.png', group:'g1', w:512, h:512, note:'', src:'data:image/webp;base64,...' }
  */
-window.SUIKA_BUILTIN_ASSETS = {
-  packVersion: 1,
-  locked: false,
-  integratedAt: null,
-  fingerprint: null,
-  slots: {}
+window.SUIKA_IMAGE_LIBRARY = {
+  version: 0,
+  builtAt: null,
+  groups: [],
+  images: [],
+  defaults: {}
 };
 
 </script>
 <script>
 /* ===== js/assets.js ===== */
 /*!
- * 合成大西瓜 · 水果贴图包
+ * 合成大西瓜 · 贴图运行时
  *
- * 需求（第 2 条）：先用 emoji 默认外观跑通，水果图片由你在「贴图工坊」里导入；
- * 你导出贴图包（.json）发给我 → 我把它内嵌进 js/assets-builtin.js 并 locked: true
- * → 之后游戏固定使用内嵌图片，界面上的导入功能自动关闭，图片就不可再改了。
+ * 图片**全部内嵌在图库里**（`js/assets-builtin.js` → `window.SUIKA_IMAGE_LIBRARY`），
+ * 游戏不再提供「导入图片」的功能：用户在「选图小窗口」里从图库里挑 11 张。
  *
- * 优先级：内嵌贴图（已锁定） > 本机导入的贴图 > 默认 emoji 外观
+ * 这个文件只干三件事：
+ *   1. 载入图库、记住用户的选择（存本地）、算出「第 N 级用哪张图」；
+ *   2. 把选中的图片预加载成 Image 对象，供 canvas 渲染；
+ *   3. 变化时通知界面重绘。
+ *
+ * 优先级：用户选择（localStorage） > 图库里的默认图像（defaults） > 没有（用 emoji 默认外观）。
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(root);
@@ -1745,223 +2292,73 @@ window.SUIKA_BUILTIN_ASSETS = {
   }
 
   var CFG = root.SuikaConfig || tryRequire('./config.js');
+  var LIB = root.SuikaLibrary || tryRequire('./library.js');
 
-  var MAX_EDGE_CAP = 384; // 单张贴图最长边上限（够大又省空间）
-  var WEBP_QUALITY = 0.92;
-
-  /* ---------------- 纯函数（可在 node 下测试） ---------------- */
-
-  function isDataImage(s) {
-    return typeof s === 'string' && /^data:image\/(png|jpe?g|webp|gif|avif|bmp);base64,/i.test(s);
-  }
-
-  function mimeOf(dataUrl) {
-    var m = /^data:(image\/[a-z0-9.+-]+);base64,/i.exec(dataUrl || '');
-    return m ? m[1].toLowerCase() : '';
-  }
-
-  /** base64 数据的真实字节数（用于显示占用空间） */
-  function byteLength(dataUrl) {
-    if (typeof dataUrl !== 'string') return 0;
-    var i = dataUrl.indexOf(',');
-    if (i < 0) return dataUrl.length;
-    var b64 = dataUrl.slice(i + 1);
-    var pad = b64.endsWith('==') ? 2 : b64.endsWith('=') ? 1 : 0;
-    return Math.max(0, Math.floor((b64.length * 3) / 4) - pad);
-  }
-
-  /**
-   * 根据文件名猜是哪一级水果，支持：
-   *   01-cherry.png / 2.png / 03.png / strawberry.webp / 草莓.png / 葡萄.jpg
-   * 返回 1..11，识别不出返回 0。
-   */
-  function matchTier(fileName, tiers) {
-    var list = tiers || (CFG ? CFG.TIERS : []);
-    var name = String(fileName || '')
-      .toLowerCase()
-      .replace(/\.[a-z0-9]+$/, '')
-      .trim();
-    if (!name) return 0;
-    var i;
-    // 去掉开头的序号：01-cherry → cherry
-    var stripped = name.replace(/^\d+[\s._-]*/, '');
-    // 1) 先看整体是否能对上英文 key / 中文名，避免 watermelon 被 melon 抢走
-    for (i = 0; i < list.length; i++) {
-      var t = list[i];
-      if (stripped === String(t.key).toLowerCase() || stripped === String(t.name).toLowerCase()) return t.tier;
-    }
-    // 2) 再看包含关系，长的 key 优先（watermelon 先于 melon）
-    var byLength = list.slice().sort(function (a, b) {
-      return String(b.key).length - String(a.key).length;
-    });
-    for (i = 0; i < byLength.length; i++) {
-      var s = byLength[i];
-      if (name.indexOf(String(s.key)) >= 0 || name.indexOf(String(s.name)) >= 0) return s.tier;
-    }
-    // 3) 最后才认开头的数字
-    var m = /(?:^|\D)(\d{1,2})(?:\D|$)/.exec(name);
-    if (m) {
-      var n = parseInt(m[1], 10);
-      if (n >= 1 && n <= list.length) return n;
-    }
-    return 0;
-  }
-
-  /** 把各种形态的贴图包统一成 { tier: {dataUrl, file, mime, bytes} } */
-  function normalizePack(raw, tiers) {
-    var list = tiers || (CFG ? CFG.TIERS : []);
-    var out = {};
-    var count = 0;
-    var rejected = 0;
-    var data = raw;
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) {
-        return { ok: false, slots: {}, count: 0, rejected: 0, error: 'JSON 解析失败' };
-      }
-    }
-    if (!data || typeof data !== 'object') {
-      return { ok: false, slots: {}, count: 0, rejected: 0, error: '贴图包内容不是对象' };
-    }
-
-    function put(tier, entry) {
-      var n = Math.floor(Number(tier));
-      if (!(n >= 1 && n <= list.length)) {
-        rejected++;
-        return;
-      }
-      var dataUrl = typeof entry === 'string' ? entry : entry && (entry.dataUrl || entry.url || entry.data);
-      if (!isDataImage(dataUrl)) {
-        rejected++;
-        return;
-      }
-      if (!(n in out)) count++;
-      out[n] = {
-        dataUrl: dataUrl,
-        file: (entry && entry.file) || (entry && entry.fileName) || '',
-        mime: mimeOf(dataUrl),
-        bytes: byteLength(dataUrl)
-      };
-    }
-
-    var i;
-    var slots = data.slots || data.images || data.fruits || data;
-    if (Array.isArray(slots)) {
-      for (i = 0; i < slots.length; i++) {
-        var it = slots[i];
-        if (!it || typeof it !== 'object') continue;
-        var tier = it.tier != null ? it.tier : it.index != null ? Number(it.index) + 1 : matchTier(it.key || it.name || it.file, list);
-        put(tier, it);
-      }
-    } else if (slots && typeof slots === 'object') {
-      var keys = Object.keys(slots);
-      for (i = 0; i < keys.length; i++) {
-        var k = keys[i];
-        var val = slots[k];
-        var tierNum = /^\d+$/.test(k) ? Number(k) : matchTier(k, list);
-        put(tierNum, val);
-      }
-    }
-    if (!count) {
-      return { ok: false, slots: {}, count: 0, rejected: rejected, error: '没找到合法的图片数据（需要 data:image/... base64）' };
-    }
-    return { ok: true, slots: out, count: count, rejected: rejected, error: null };
-  }
-
-  /** 贴图包指纹：同样的图片得到同样的 16 位指纹，用来确认「是不是我提交的那一版」 */
-  function fingerprint(slots) {
-    var str = '';
-    var keys = Object.keys(slots || {})
-      .map(Number)
-      .filter(function (n) {
-        return n >= 1;
-      })
-      .sort(function (a, b) {
-        return a - b;
-      });
-    for (var i = 0; i < keys.length; i++) {
-      var s = slots[keys[i]];
-      var d = typeof s === 'string' ? s : s && s.dataUrl;
-      if (!d) continue;
-      str += keys[i] + '|' + d + '\n';
-    }
-    if (!str) return '--------';
-    function fnv(text, seed) {
-      var h = seed >>> 0;
-      for (var i = 0; i < text.length; i++) {
-        h ^= text.charCodeAt(i);
-        h = Math.imul(h, 16777619) >>> 0;
-      }
-      return ('00000000' + h.toString(16)).slice(-8);
-    }
-    return fnv(str, 2166136261) + fnv(str, 16777619);
-  }
-
-  /* ---------------- 运行时 ---------------- */
+  var PICK_KEY = 'suika.pick.v1';
 
   function create(opts) {
     opts = opts || {};
     var storage = opts.storage || null;
-    var key = opts.key || (CFG ? CFG.STORAGE_KEYS.assets : 'suika.assets.v1');
-    var tiers = (CFG ? CFG.TIERS : []).slice();
 
-    var builtinRaw = root.SUIKA_BUILTIN_ASSETS || opts.builtin || null;
-    var builtin = normalizePack(builtinRaw && builtinRaw.slots ? { slots: builtinRaw.slots } : builtinRaw || {});
-    var builtinLocked = !!(builtinRaw && builtinRaw.locked) || opts.forceLock === true;
-    var builtinInfo = builtinRaw && builtinRaw.integratedAt ? builtinRaw : null;
-
-    var custom = {};
-    var customLocked = false;
+    var library = LIB.normalize(opts.library || root.SUIKA_IMAGE_LIBRARY || null);
+    var pick = LIB.sanitizePick(library, readPick());
     var images = {}; // tier -> HTMLImageElement
     var listeners = [];
 
-    function readCustom() {
+    function readPick() {
       try {
-        var raw = storage && storage.getItem(key);
-        if (!raw) return;
-        var parsed = JSON.parse(raw);
-        var res = normalizePack(parsed, tiers);
-        if (res.ok) {
-          custom = res.slots;
-          customLocked = !!parsed.locked;
-        }
+        var raw = storage && storage.getItem(PICK_KEY);
+        return raw ? JSON.parse(raw) : null;
       } catch (e) {
-        /* 忽略损坏的本地数据 */
+        return null;
       }
     }
 
-    function saveCustom() {
+    function savePick() {
       try {
-        if (!storage) return { ok: true };
-        if (!Object.keys(custom).length) {
-          storage.removeItem(key);
-          return { ok: true };
-        }
-        storage.setItem(key, JSON.stringify({ version: 1, locked: customLocked, slots: custom }));
+        if (storage) storage.setItem(PICK_KEY, JSON.stringify(pick));
         return { ok: true };
       } catch (e) {
-        return { ok: false, error: /quota|exceed/i.test(String(e && e.name) + String(e && e.message)) ? 'quota' : 'storage' };
+        return { ok: false, error: 'storage' };
       }
     }
 
-    /** 当前实际生效的贴图来源 */
+    function notify() {
+      var info = self.info();
+      for (var i = 0; i < listeners.length; i++) {
+        try {
+          listeners[i](info);
+        } catch (e) {
+          /* noop */
+        }
+      }
+    }
+
+    /* ---- 查询 ---- */
+
+    function imageFor(tier) {
+      return LIB.resolve(library, pick, tier);
+    }
+
+    /** 这一级的图是哪来的：'pick' 用户选的 / 'default' 图库默认 / 'none' 没有 */
     function sourceOf(tier) {
-      if (builtin.slots[tier]) return 'builtin';
-      if (custom[tier]) return 'custom';
-      return 'default';
+      var t = Math.round(Number(tier));
+      var chosen = pick[t];
+      if (chosen && LIB.byId(library, chosen)) return 'pick';
+      if (library.defaults[t] && LIB.byId(library, library.defaults[t])) return 'default';
+      return 'none';
     }
 
     function urlOf(tier) {
-      var s = builtin.slots[tier] || custom[tier];
-      return s ? s.dataUrl : null;
+      var img = imageFor(tier);
+      return img ? img.src : null;
     }
 
     function imageOf(tier) {
       var url = urlOf(tier);
       if (!url) return null;
-      var img = images[tier];
-      if (img && img.__url === url && img.complete && img.naturalWidth) return img;
+      var el = images[tier];
+      if (el && el.__url === url && el.complete && el.naturalWidth) return el;
       return null;
     }
 
@@ -1972,7 +2369,9 @@ window.SUIKA_BUILTIN_ASSETS = {
         return Promise.resolve(null);
       }
       var existing = images[tier];
-      if (existing && existing.__url === url && existing.complete && existing.naturalWidth) return Promise.resolve(existing);
+      if (existing && existing.__url === url && existing.complete && existing.naturalWidth) {
+        return Promise.resolve(existing);
+      }
       return new Promise(function (resolve) {
         var img = new Image();
         img.__url = url;
@@ -1988,275 +2387,112 @@ window.SUIKA_BUILTIN_ASSETS = {
     }
 
     function preloadAll() {
-      return Promise.all(tiers.map(function (t) {
-        return preload(t.tier);
-      }));
+      var list = [];
+      for (var t = 1; t <= LIB.TIER_COUNT; t++) list.push(preload(t));
+      return Promise.all(list);
     }
 
-    function notify() {
-      for (var i = 0; i < listeners.length; i++) {
-        try {
-          listeners[i](info());
-        } catch (e) {
-          /* noop */
-        }
+    /* ---- 修改选择 ---- */
+
+    /** 把某张图放到某一级（imgId 传 null 表示清空，回到默认图） */
+    function setTier(tier, imgId) {
+      var t = Math.round(Number(tier));
+      if (!(t >= 1 && t <= LIB.TIER_COUNT)) return Promise.resolve({ ok: false, error: 'bad-tier' });
+      if (imgId == null) {
+        delete pick[t];
+      } else {
+        var img = LIB.byId(library, String(imgId));
+        if (!img) return Promise.resolve({ ok: false, error: 'no-such-image' });
+        pick[t] = img.id;
       }
-    }
-
-    function onChange(fn) {
-      listeners.push(fn);
-      return function () {
-        var i = listeners.indexOf(fn);
-        if (i >= 0) listeners.splice(i, 1);
-      };
-    }
-
-    function totalBytes() {
-      var n = 0;
-      var src = Object.keys(builtin.slots).length ? builtin.slots : custom;
-      Object.keys(src).forEach(function (k) {
-        n += src[k].bytes || 0;
+      savePick();
+      return preload(t).then(function () {
+        notify();
+        return { ok: true, tier: t, id: imgId ? String(imgId) : null };
       });
+    }
+
+    /** 一键恢复默认图像 */
+    function resetToDefaults() {
+      pick = {};
+      savePick();
+      return preloadAll().then(function () {
+        notify();
+        return { ok: true };
+      });
+    }
+
+    /** 用一批选择整体替换 */
+    function setPick(next) {
+      pick = LIB.sanitizePick(library, next);
+      savePick();
+      return preloadAll().then(function () {
+        notify();
+        return { ok: true, count: Object.keys(pick).length };
+      });
+    }
+
+    /** 某一级现在用的是图库里的哪张图（没有就是 null） */
+    function idOf(tier) {
+      var img = imageFor(tier);
+      return img ? img.id : null;
+    }
+
+    function filledCount() {
+      var n = 0;
+      for (var t = 1; t <= LIB.TIER_COUNT; t++) if (imageFor(t)) n += 1;
       return n;
     }
 
-    function info() {
-      var active = Object.keys(builtin.slots).length ? builtin.slots : custom;
-      var filled = Object.keys(active).length;
-      return {
-        mode: builtinLocked ? 'builtin' : Object.keys(builtin.slots).length ? 'builtin' : filled ? 'custom' : 'default',
-        locked: builtinLocked,
-        customLocked: customLocked,
-        customCount: Object.keys(custom).length,
-        builtinCount: Object.keys(builtin.slots).length,
-        filled: filled,
-        bytes: totalBytes(),
-        fingerprint: fingerprint(active),
-        integratedAt: builtinInfo ? builtinInfo.integratedAt : null,
-        canEdit: !builtinLocked
-      };
-    }
-
-    /* ---- 导入 ---- */
-
-    function maxEdgeFor(tier) {
-      var def = CFG ? CFG.tierByNumber(tier) : null;
-      var r = def ? def.r : 64;
-      return Math.max(96, Math.min(MAX_EDGE_CAP, Math.round(r * 2 * 1.6)));
-    }
-
-    function readFileAsImage(file) {
-      return new Promise(function (resolve, reject) {
-        if (!/^image\//.test(file.type)) {
-          reject(new Error('不是图片文件：' + file.name));
-          return;
-        }
-        var reader = new FileReader();
-        reader.onload = function () {
-          var img = new Image();
-          img.onload = function () {
-            resolve(img);
-          };
-          img.onerror = function () {
-            reject(new Error('图片解码失败：' + file.name));
-          };
-          img.src = String(reader.result);
+    var self = {
+      library: library,
+      onChange: function (fn) {
+        listeners.push(fn);
+        return function () {
+          var i = listeners.indexOf(fn);
+          if (i >= 0) listeners.splice(i, 1);
         };
-        reader.onerror = function () {
-          reject(new Error('读取失败：' + file.name));
+      },
+      imageFor: imageFor,
+      imageOf: imageOf,
+      urlOf: urlOf,
+      idOf: idOf,
+      sourceOf: sourceOf,
+      preload: preload,
+      preloadAll: preloadAll,
+      setTier: setTier,
+      setPick: setPick,
+      resetToDefaults: resetToDefaults,
+      pick: function () {
+        return Object.assign({}, pick);
+      },
+      /** 界面用：图库与当前选择的状态 */
+      info: function () {
+        var st = LIB.stats(library);
+        return {
+          groups: st.groups,
+          libraryImages: st.images,
+          libraryBytes: st.bytes,
+          fingerprint: st.fingerprint,
+          builtAt: st.builtAt,
+          defaultCount: st.defaults,
+          filled: filledCount(),
+          total: LIB.TIER_COUNT,
+          picked: Object.keys(pick).length,
+          empty: st.images === 0
         };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    /** 等比缩放 + WebP 编码（不支持时退回 PNG），既保透明又省空间 */
-    function encodeImage(img, tier) {
-      var maxEdge = maxEdgeFor(tier);
-      var w = img.naturalWidth || img.width;
-      var h = img.naturalHeight || img.height;
-      var scale = Math.min(1, maxEdge / Math.max(w, h));
-      var cw = Math.max(1, Math.round(w * scale));
-      var ch = Math.max(1, Math.round(h * scale));
-      var canvas = document.createElement('canvas');
-      canvas.width = cw;
-      canvas.height = ch;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, cw, ch);
-      var url = canvas.toDataURL('image/webp', WEBP_QUALITY);
-      if (!/^data:image\/webp/i.test(url)) url = canvas.toDataURL('image/png');
-      return { dataUrl: url, w: cw, h: ch, mime: mimeOf(url), bytes: byteLength(url) };
-    }
-
-    function setSlot(tier, file, img) {
-      return encodeImage(img, tier).then(function (enc) {
-        var prev = custom[tier];
-        custom[tier] = { dataUrl: enc.dataUrl, file: file ? file.name : (prev && prev.file) || '', mime: enc.mime, bytes: enc.bytes, w: enc.w, h: enc.h };
-        return preload(tier).then(function () {
-          var saved = saveCustom();
-          if (!saved.ok) {
-            if (prev) custom[tier] = prev;
-            else delete custom[tier];
-            return preload(tier).then(function () {
-              return { ok: false, error: saved.error, tier: tier };
-            });
-          }
-          notify();
-          return { ok: true, tier: tier, bytes: enc.bytes };
-        });
-      });
-    }
-
-    function setFromFile(tier, file) {
-      if (builtinLocked) return Promise.resolve({ ok: false, error: 'locked' });
-      return readFileAsImage(file)
-        .then(function (img) {
-          return setSlot(tier, file, img);
-        })
-        .catch(function (err) {
-          return { ok: false, error: String(err.message || err), tier: tier };
-        });
-    }
-
-    /** 批量导入：按文件名自动分配到对应等级 */
-    function importFiles(files) {
-      if (builtinLocked) return Promise.resolve({ ok: false, error: 'locked', assigned: [], unmatched: [] });
-      var list = Array.prototype.slice.call(files || []);
-      var assigned = [];
-      var unmatched = [];
-      var chain = Promise.resolve();
-      list.forEach(function (file) {
-        var tier = matchTier(file.name, tiers);
-        if (!tier) {
-          unmatched.push(file.name);
-          return;
-        }
-        chain = chain.then(function () {
-          return setFromFile(tier, file).then(function (res) {
-            if (res.ok) assigned.push({ tier: tier, file: file.name });
-            else unmatched.push(file.name);
-          });
-        });
-      });
-      return chain.then(function () {
-        return { ok: true, assigned: assigned, unmatched: unmatched };
-      });
-    }
-
-    function clearSlot(tier) {
-      if (builtinLocked) return { ok: false, error: 'locked' };
-      delete custom[tier];
-      delete images[tier];
-      saveCustom();
-      notify();
-      return { ok: true };
-    }
-
-    function clearAll() {
-      if (builtinLocked) return { ok: false, error: 'locked' };
-      custom = {};
-      images = {};
-      customLocked = false;
-      saveCustom();
-      notify();
-      return { ok: true };
-    }
-
-    function setLocked(flag) {
-      customLocked = !!flag;
-      saveCustom();
-      notify();
-      return customLocked;
-    }
-
-    /** 导出贴图包：把这个 .json 发给我即可 */
-    function exportPack(packNote) {
-      var slots = [];
-      tiers.forEach(function (t) {
-        var s = builtin.slots[t.tier] || custom[t.tier];
-        if (!s) return;
-        slots.push({
-          tier: t.tier,
-          key: t.key,
-          name: t.name,
-          file: s.file || (CFG ? CFG.suggestFileName(t) : t.key + '.png'),
-          mime: s.mime || mimeOf(s.dataUrl),
-          bytes: s.bytes || byteLength(s.dataUrl),
-          dataUrl: s.dataUrl
-        });
-      });
-      var pack = {
-        app: 'suika-game',
-        packVersion: 1,
-        gameVersion: CFG ? CFG.VERSION : '',
-        createdAt: new Date().toISOString(),
-        fingerprint: fingerprint(builtin.slots[t.tier] ? builtin.slots : custom),
-        slots: slots,
-        note: packNote || '《合成大西瓜》水果贴图包：把它发给 AI 即可内嵌为最终版，之后图片不可再改。'
-      };
-      return JSON.stringify(pack, null, 1);
-    }
-
-    /** 导入贴图包（.json 文本或对象） */
-    function importPack(text) {
-      if (builtinLocked) return { ok: false, error: 'locked' };
-      var res = normalizePack(text, tiers);
-      if (!res.ok) return res;
-      var backup = custom;
-      custom = res.slots;
-      var saved = saveCustom();
-      if (!saved.ok) {
-        custom = backup;
-        saveCustom();
-        return { ok: false, error: saved.error, count: 0 };
       }
-      images = {};
-      preloadAll().then(notify);
-      return { ok: true, count: res.count, slots: res.slots };
-    }
+    };
 
-    readCustom();
-    // 首次读取后，异步把图片对象准备好；渲染层在图片就绪前会用默认外观
+    // 首次进来先把图片加载好；就绪前渲染层会用 emoji 默认外观
     setTimeout(function () {
       preloadAll().then(notify);
     }, 0);
 
-    return {
-      tiers: tiers,
-      info: info,
-      onChange: onChange,
-      sourceOf: sourceOf,
-      urlOf: urlOf,
-      imageOf: imageOf,
-      preload: preload,
-      preloadAll: preloadAll,
-      setFromFile: setFromFile,
-      importFiles: importFiles,
-      clearSlot: clearSlot,
-      clearAll: clearAll,
-      setLocked: setLocked,
-      exportPack: exportPack,
-      importPack: importPack,
-      slotInfo: function (tier) {
-        var s = builtin.slots[tier] || custom[tier];
-        return s ? { source: sourceOf(tier), file: s.file, bytes: s.bytes, mime: s.mime, dataUrl: s.dataUrl } : null;
-      }
-    };
+    return self;
   }
 
-  return Object.assign(
-    {
-      create: create,
-      MAX_EDGE_CAP: MAX_EDGE_CAP
-    },
-    {
-      matchTier: matchTier,
-      normalizePack: normalizePack,
-      fingerprint: fingerprint,
-      byteLength: byteLength,
-      isDataImage: isDataImage,
-      mimeOf: mimeOf
-    }
-  );
+  return { create: create, PICK_KEY: PICK_KEY };
 });
 
 </script>
@@ -3243,7 +3479,7 @@ window.SUIKA_BUILTIN_ASSETS = {
 </script>
 <script>
 /* ===== js/engine.js ===== */
-/*!
+﻿/*!
  * 合成大西瓜 · 游戏核心（物理 + 合成 + 计分 + 判负）
  *
  * 这个文件完全不碰 DOM，只维护 Matter.js 世界和游戏状态，
@@ -3289,6 +3525,8 @@ window.SUIKA_BUILTIN_ASSETS = {
     var floorY = H - WT;
 
     var difficulty = CFG.clampDifficulty(options.difficulty != null ? options.difficulty : CFG.DEFAULT_DIFFICULTY);
+    // 玩偶轮廓：给定等级返回 { circles:[{x,y,r}] }（归一化），没有就返回 null → 退回圆形碰撞
+    var shapeOf = typeof options.shapeOf === 'function' ? options.shapeOf : null;
     var engine = Engine.create({
       // 默认不开沉睡：见 config.js 里的说明（沉睡会让半空卡住的水果永远不掉）
       enableSleeping: options.enableSleeping != null ? options.enableSleeping : PH.enableSleeping
@@ -3385,7 +3623,7 @@ window.SUIKA_BUILTIN_ASSETS = {
       if (hi <= lo) x = W / 2;
       else x = Math.min(hi, Math.max(lo, x));
 
-      var body = Bodies.circle(x, y, r, {
+      var opts = {
         label: 'fruit',
         restitution: PH.fruit.restitution,
         friction: PH.fruit.friction,
@@ -3394,14 +3632,57 @@ window.SUIKA_BUILTIN_ASSETS = {
         density: PH.fruit.density,
         slop: PH.fruit.slop,
         sleepThreshold: 60
-      });
+      };
+
+      /*
+       * 有玩偶轮廓数据时，用「一组圆」拼出复合刚体（碰撞体积贴合玩偶），
+       * 没有就退回原来的单个圆（emoji 外观 / 没选图时）。
+       * 注意：复合刚体的 position 是**质心**，而图片是按几何中心画的，
+       * 所以这里把零件按 (c - com) 摆放，让质心正好落在 (x, y)，
+       * 渲染时再用 -com*D 把图片挪回去。
+       */
+      var shape = shapeOf ? shapeOf(tierNum) : null;
+      var body;
+      if (shape && shape.circles && shape.circles.length > 1) {
+        var D = r * 2;
+        var com = shapeCom(shape.circles);
+        var parts = [];
+        for (var i = 0; i < shape.circles.length; i++) {
+          var c = shape.circles[i];
+          parts.push(Bodies.circle(x + (c.x - com.x) * D, y + (c.y - com.y) * D, Math.max(1.2, c.r * D), opts));
+        }
+        body = Body.create(Object.assign({}, opts, { parts: parts }));
+        body.suikaShape = { circles: shape.circles, com: com };
+        body.circleRadius = r; // 其余逻辑（危险线、边界兜底、渲染尺寸）都还用这个半径
+      } else {
+        body = Bodies.circle(x, y, r, opts);
+      }
       body.suikaTier = tierNum;
       body.suikaAboveMs = 0;
       body.suikaDead = false;
       body.suikaRemoved = false;
       body.suikaBornMs = state.elapsedMs;
+      body.suikaSq = 0; // 挤压形变量（渲染用）
+      body.suikaSqA = 0; // 挤压轴角度
+      body.suikaSqV = 0; // 形变速度（弹簧-阻尼用）
       Composite.add(world, body);
       return body;
+    }
+
+    /** 轮廓圆的面积加权质心（= 这个复合刚体的质心） */
+    function shapeCom(circles) {
+      var sx = 0;
+      var sy = 0;
+      var sw = 0;
+      for (var i = 0; i < circles.length; i++) {
+        var c = circles[i];
+        var area = c.r * c.r;
+        sx += c.x * area;
+        sy += c.y * area;
+        sw += area;
+      }
+      if (!sw) return { x: 0, y: 0 };
+      return { x: sx / sw, y: sy / sw };
     }
 
     /** 当前场上还活着的水果（排除正在合并中的两颗） */
@@ -3437,13 +3718,86 @@ window.SUIKA_BUILTIN_ASSETS = {
       return body;
     }
 
+    /* ---------------- 果冻手感（回弹阈值 + 挤压形变） ---------------- */
+    var JELLY = (CFG.RULES && CFG.RULES.jelly) || {};
+
+    /**
+     * 处理一次接触对：
+     *   · 法向接近速度低于阈值 → 把这一对的弹性清零（堆叠静止时不微弹）
+     *   · 高于阈值 → 记下碰撞前速度，并给两颗水果注入挤压形变
+     */
+    function applyJelly(pair, a, b) {
+      var col = pair.collision;
+      if (!col || !col.normal) return;
+      var nx = col.normal.x;
+      var ny = col.normal.y;
+      var vax = a.velocity ? a.velocity.x : 0;
+      var vay = a.velocity ? a.velocity.y : 0;
+      var vbx = b.velocity ? b.velocity.x : 0;
+      var vby = b.velocity ? b.velocity.y : 0;
+      var vn = Math.abs((vax - vbx) * nx + (vay - vby) * ny);
+      if (vn < (JELLY.bounceThreshold || 0.92)) {
+        pair.restitution = 0; // 慢速贴住 → 不弹（Matter 没有内置阈值，这里补上）
+        return;
+      }
+      squash(a, nx, ny, vn);
+      squash(b, -nx, -ny, vn);
+    }
+
+    /** 沿撞击法线压扁（渲染时施加），只接受更强的撞击，避免连续接触反复顶起 */
+    function squash(body, nx, ny, vn) {
+      if (body.suikaTier == null) return;
+      var k = Math.min(JELLY.squashMax || 0.3, vn / (JELLY.speedScale || 25));
+      if (k <= (body.suikaSq || 0)) return;
+      body.suikaSq = k;
+      body.suikaSqA = Math.atan2(ny, nx);
+      body.suikaSqV = 0; // 新撞击：从"被压扁"这一刻重新开始回弹
+    }
+
+    /**
+     * 形变的恢复：二阶弹簧-阻尼（会过冲 + 回摆），按固定步长积分，跟帧率无关。
+     * 压扁 → 弹回 → 弹过头（微微拉长）→ 回摆 → 停住，晃 1~2 下，像果冻。
+     */
+    function decaySquash(dtMs) {
+      var dt = dtMs / 1000;
+      var k = JELLY.springK || 120;
+      var c = JELLY.springC || 11;
+      var maxSq = JELLY.squashMax || 0.3;
+      var minSq = -(JELLY.stretchMax || 0.18);
+      var all = Composite.allBodies(world);
+      for (var i = 0; i < all.length; i++) {
+        var b = all[i];
+        var sq = b.suikaSq || 0;
+        var v = b.suikaSqV || 0;
+        if (sq === 0 && v === 0) continue;
+        v += (-k * sq - c * v) * dt;
+        sq += v * dt;
+        if (sq > maxSq) {
+          sq = maxSq;
+          v = Math.min(v, 0);
+        } else if (sq < minSq) {
+          sq = minSq;
+          v = Math.max(v, 0);
+        }
+        if (Math.abs(sq) < 0.0015 && Math.abs(v) < 0.02) {
+          b.suikaSq = 0;
+          b.suikaSqV = 0;
+        } else {
+          b.suikaSq = sq;
+          b.suikaSqV = v;
+        }
+      }
+    }
+
     /* ---------------- 合成 ---------------- */
 
     Events.on(engine, 'collisionStart', function (evt) {
       var pairs = evt.pairs;
       for (var i = 0; i < pairs.length; i++) {
-        var a = pairs[i].bodyA;
-        var b = pairs[i].bodyB;
+        // 复合刚体（玩偶轮廓）碰撞时报的是「零件」，要取回父体
+        var a = pairs[i].bodyA.parent || pairs[i].bodyA;
+        var b = pairs[i].bodyB.parent || pairs[i].bodyB;
+        applyJelly(pairs[i], a, b);
         if (a.suikaTier == null || b.suikaTier == null) continue;
         if (a.suikaDead || b.suikaDead || a.suikaRemoved || b.suikaRemoved) continue;
         if (a.suikaTier !== b.suikaTier) continue;
@@ -3454,6 +3808,15 @@ window.SUIKA_BUILTIN_ASSETS = {
       }
     });
 
+    // 持续接触也要处理：果堆被压时下面那几颗会跟着形变（慢速贴住时上面那条阈值会拦住，不会自激）
+    Events.on(engine, 'collisionActive', function (evt) {
+      var pairs = evt.pairs;
+      for (var i = 0; i < pairs.length; i++) {
+        var a = pairs[i].bodyA.parent || pairs[i].bodyA;
+        var b = pairs[i].bodyB.parent || pairs[i].bodyB;
+        applyJelly(pairs[i], a, b);
+      }
+    });
     function flushMerges() {
       if (!pendingMerges.length) return;
       var queue = pendingMerges;
@@ -3641,6 +4004,7 @@ window.SUIKA_BUILTIN_ASSETS = {
       var steps = 0;
       while (accumulator >= BOARD.fixedStep && steps < BOARD.stepsPerFrame) {
         Engine.update(engine, BOARD.fixedStep);
+        decaySquash(BOARD.fixedStep);
         flushMerges();
         accumulator -= BOARD.fixedStep;
         steps += 1;
@@ -3715,7 +4079,7 @@ window.SUIKA_BUILTIN_ASSETS = {
 </script>
 <script>
 /* ===== js/render.js ===== */
-/*!
+﻿/*!
  * 合成大西瓜 · Canvas 渲染
  * 只负责画：场地、危险线、水果（贴图或默认 emoji 外观）、粒子与飘分特效。
  */
@@ -3958,13 +4322,88 @@ window.SUIKA_BUILTIN_ASSETS = {
       ctx.fill();
     }
 
-    function drawFruit(body, assets) {
+    /** 轮廓圆的面积加权质心（和引擎里保持一致，用于「下一颗」预览） */
+    function comOf(circles) {
+      var sx = 0;
+      var sy = 0;
+      var sw = 0;
+      for (var i = 0; i < circles.length; i++) {
+        var c = circles[i];
+        var a = c.r * c.r;
+        sx += c.x * a;
+        sy += c.y * a;
+        sw += a;
+      }
+      if (!sw) return { x: 0, y: 0 };
+      return { x: sx / sw, y: sy / sw };
+    }
+
+    function drawFruit(body, assets, nowMs) {
       var def = CFG.tierByNumber(body.suikaTier);
       if (!def) return;
-      var r = body.circleRadius;
+      var r = body.circleRadius || def.r;
+      var shape = body.suikaShape;
+      var JELLY = (CFG.RULES && CFG.RULES.jelly) || {};
+      // 合成瞬间「弹出来」：新水果出生后 popMs 内从 1+popScale 缩到 1
+      var pop = 1;
+      if (body.suikaBornMs != null && nowMs) {
+        var age = nowMs - body.suikaBornMs;
+        if (age >= 0 && age < (JELLY.popMs || 220)) {
+          pop = 1 + (JELLY.popScale || 0.28) * (1 - age / (JELLY.popMs || 220));
+        }
+      }
+      // 挤压形变（纯渲染层：世界轴先压扁再自转，物理形状完全不变）
+      var sq = body.suikaSq || 0;
+      var sqA = body.suikaSqA || 0;
       ctx.save();
       ctx.translate(body.position.x, body.position.y);
+      if (Math.abs(sq) > 0.004) {
+        ctx.rotate(sqA);
+        ctx.scale(1 - sq, 1 + sq * (JELLY.stretch || 0.85));
+        ctx.rotate(-sqA);
+      }
       ctx.rotate(body.angle || 0);
+      r = r * pop;
+
+      if (shape) {
+        /*
+         * 玩偶：按整只的尺寸画（不再裁成圆形），并且跟着刚体一起转。
+         * 刚体的 position 是质心，图片中心在 -com*D 处，所以要挪回去。
+         */
+        var D = r * 2;
+        ctx.translate(-shape.com.x * D, -shape.com.y * D);
+        var dimg = assets ? assets.imageOf(body.suikaTier) : null;
+        // 脚下的小影子
+        ctx.beginPath();
+        if (ctx.ellipse) ctx.ellipse(0, D * 0.34, D * 0.33, D * 0.085, 0, 0, TAU);
+        else ctx.arc(0, D * 0.34, D * 0.14, 0, TAU);
+        ctx.fillStyle = 'rgba(70,40,20,0.13)';
+        ctx.fill();
+        if (dimg) {
+          var diw = dimg.naturalWidth;
+          var dih = dimg.naturalHeight;
+          var dsc = D / Math.max(diw, dih);
+          ctx.drawImage(dimg, (-diw * dsc) / 2, (-dih * dsc) / 2, diw * dsc, dih * dsc);
+        } else {
+          drawFruitShape(def, r);
+        }
+        // ?shapes=1 ：把真实碰撞体画出来（黄色圆组 = 物理引擎实际用的形状）
+        if (root.SUIKA_SHOW_SHAPES) {
+          for (var ci = 0; ci < shape.circles.length; ci++) {
+            var cc = shape.circles[ci];
+            ctx.beginPath();
+            ctx.arc(cc.x * D, cc.y * D, cc.r * D, 0, TAU);
+            ctx.fillStyle = 'rgba(255,170,40,0.20)';
+            ctx.fill();
+            ctx.lineWidth = Math.max(1, D * 0.006);
+            ctx.strokeStyle = 'rgba(255,209,102,0.95)';
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+        return;
+      }
+
       // 影子
       ctx.beginPath();
       ctx.arc(0, 0, r + 1.5, 0, TAU);
@@ -4016,7 +4455,15 @@ window.SUIKA_BUILTIN_ASSETS = {
 
       ctx.save();
       ctx.globalAlpha = aim.ready ? 1 : 0.32;
-      var fake = { position: { x: x, y: y }, circleRadius: r, angle: 0, suikaTier: aim.tier };
+      var aimShape = assets && assets.shapeOf ? assets.shapeOf(aim.tier) : null;
+      var fake = {
+        position: { x: x, y: y },
+        circleRadius: r,
+        angle: 0,
+        suikaTier: aim.tier,
+        suikaShape: aimShape && aimShape.circles ? { circles: aimShape.circles, com: aimShape.com || null } : null
+      };
+      if (fake.suikaShape && !fake.suikaShape.com) fake.suikaShape.com = comOf(aimShape.circles);
       drawFruit(fake, assets);
       ctx.restore();
 
@@ -4084,7 +4531,7 @@ window.SUIKA_BUILTIN_ASSETS = {
       roundRectPath(ctx, WT, WT, W - WT * 2, H - WT * 2, [0, 0, 22, 22]);
       ctx.clip();
       var list = frame.fruits || [];
-      for (var i = 0; i < list.length; i++) drawFruit(list[i], frame.assets);
+      for (var i = 0; i < list.length; i++) drawFruit(list[i], frame.assets, frame.elapsedMs || 0);
       drawAim(frame.aim, frame.assets);
       drawEffects();
       ctx.restore();
@@ -4130,7 +4577,7 @@ window.SUIKA_BUILTIN_ASSETS = {
 </script>
 <script>
 /* ===== js/ui.js ===== */
-/*!
+﻿/*!
  * 合成大西瓜 · 界面层
  * 只做「把数据画成 DOM」和「弹提示」，游戏逻辑不在这里。
  */
@@ -4400,123 +4847,8 @@ window.SUIKA_BUILTIN_ASSETS = {
     }, 180);
   }
 
-  /* ---------------- 贴图工坊 ---------------- */
 
-  function renderSlots(container, opts) {
-    var assets = opts.assets;
-    if (!container) return;
-    container.innerHTML = '';
-    var locked = !assets.info().canEdit;
-    CFG.TIERS.forEach(function (t) {
-      var info = assets.slotInfo(t.tier);
-      var li = document.createElement('li');
-      li.className = 'slot';
-      li.dataset.tier = t.tier;
-      if (info) li.classList.add('has-custom');
-
-      var preview = document.createElement('div');
-      preview.className = 'slot-preview';
-      var img = assets.imageOf(t.tier);
-      if (img) {
-        var im = document.createElement('img');
-        im.src = img.src;
-        im.alt = t.name;
-        preview.appendChild(im);
-      } else {
-        preview.textContent = t.emoji;
-        preview.style.background = 'radial-gradient(circle at 32% 28%, ' + root.SuikaRender.lighten(t.color, 0.5) + ', ' + t.color + ' 62%, ' + t.edge + ')';
-      }
-
-      var meta = document.createElement('div');
-      meta.className = 'slot-meta';
-      var title = document.createElement('b');
-      title.textContent = 'Lv.' + t.tier + ' ' + t.name;
-      var sub = document.createElement('span');
-      sub.textContent = '建议 ' + CFG.suggestFileName(t) + ' · 直径 ' + t.r * 2 + 'px · 合成 +' + t.score + ' 分';
-      var src = document.createElement('em');
-      src.className = 'slot-src';
-      if (info && info.source === 'builtin') {
-        src.textContent = '已内嵌（最终版）' + (info.bytes ? ' · ' + formatBytes(info.bytes) : '');
-      } else if (info) {
-        src.textContent = '自定义 · ' + (info.file || '已导入') + (info.bytes ? ' · ' + formatBytes(info.bytes) : '');
-      } else {
-        src.textContent = '默认外观（未导入）';
-      }
-      meta.appendChild(title);
-      meta.appendChild(sub);
-      meta.appendChild(src);
-
-      var btns = document.createElement('div');
-      btns.className = 'slot-btns';
-      var pick = document.createElement('button');
-      pick.type = 'button';
-      pick.className = 'btn btn-mini';
-      pick.textContent = '选图片';
-      pick.disabled = locked;
-      pick.addEventListener('click', function () {
-        opts.onPick(t.tier);
-      });
-      var clear = document.createElement('button');
-      clear.type = 'button';
-      clear.className = 'btn btn-mini btn-ghost';
-      clear.textContent = '清除';
-      clear.disabled = locked || !info;
-      clear.addEventListener('click', function () {
-        opts.onClear(t.tier);
-      });
-      btns.appendChild(pick);
-      btns.appendChild(clear);
-
-      li.appendChild(preview);
-      li.appendChild(meta);
-      li.appendChild(btns);
-
-      if (!locked) {
-        ['dragenter', 'dragover'].forEach(function (ev) {
-          li.addEventListener(ev, function (e) {
-            e.preventDefault();
-            li.classList.add('is-drop');
-          });
-        });
-        ['dragleave', 'drop'].forEach(function (ev) {
-          li.addEventListener(ev, function () {
-            li.classList.remove('is-drop');
-          });
-        });
-        li.addEventListener('drop', function (e) {
-          e.preventDefault();
-          var files = e.dataTransfer && e.dataTransfer.files;
-          if (files && files.length) opts.onDropFiles(t.tier, files);
-        });
-      }
-      container.appendChild(li);
-    });
-  }
-
-  function renderAssetStatus(node, info) {
-    if (!node) return;
-    var modeText =
-      info.mode === 'builtin' ? '🔒 最终版内嵌贴图（不可修改）' : info.mode === 'custom' ? '✏️ 正在使用你导入的贴图' : '🎨 默认 emoji 外观（可以随时导入图片替换）';
-    node.innerHTML =
-      '<div class="status-line">' +
-      '<span class="status-mode">' +
-      modeText +
-      '</span>' +
-      '<span>已导入 ' +
-      info.filled +
-      '/11</span>' +
-      '<span>占用 ' +
-      formatBytes(info.bytes) +
-      '</span>' +
-      '<span>指纹 <code>' +
-      info.fingerprint +
-      '</code></span>' +
-      (info.integratedAt ? '<span>整合时间 ' + String(info.integratedAt).slice(0, 10) + '</span>' : '') +
-      '</div>' +
-      (info.customLocked && !info.locked ? '<div class="status-note">你已把当前贴图标记为「最终版」。再点一次锁定按钮可解锁继续修改。</div>' : '');
-  }
-
-  /* ---------------- 导出 ---------------- */
+  /* ---------------- 对外 ---------------- */
 
   root.SuikaUI = {
     el: el,
@@ -4531,16 +4863,552 @@ window.SUIKA_BUILTIN_ASSETS = {
     updateChain: updateChain,
     renderLeaderboard: renderLeaderboard,
     showOverlay: showOverlay,
-    hideOverlay: hideOverlay,
-    renderSlots: renderSlots,
-    renderAssetStatus: renderAssetStatus
+    hideOverlay: hideOverlay
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 
 </script>
 <script>
-/* ===== js/game.js ===== */
+/* ===== js/picker.js ===== */
 /*!
+ * 合成大西瓜 · 选图小窗口
+ *
+ * 需求（用户提的）：
+ *   1. 单独开一个小窗口，从图库里自由挑 11 张；
+ *   2. 图库按「分组」分类展示（分组由用户定义，写在内嵌图库的 groups 里）；
+ *   3. 图库里有「默认图像」，窗口里能一键恢复默认；
+ *   4. 不做「导入图片」——图片全内嵌，这里只负责挑；
+ *   5. 颜色代表水果（西瓜/菠萝/樱桃…），尺寸直接标在图和水果位上（🍉西瓜 ⌀250）。
+ *
+ * 交互：
+ *   · 点图片库里的图 → 选中；再点左边的水果位 → 放上去（也可以直接把图拖到水果位上）；
+ *   · 水果位右边的 ✕ 表示清空，回到图库默认图；
+ *   · 窗口可以拖动（按住标题栏）和折叠，方便一边看游戏一边挑图；
+ *   · 没选满 11 个位子就关窗口时会弹一句提醒（图库是空的就不烦人）。
+ */
+(function (root) {
+  'use strict';
+
+  var CFG = root.SuikaConfig;
+  var LIB = root.SuikaLibrary;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function create(opts) {
+    var assets = opts.assets;
+    var ui = opts.ui || root.SuikaUI;
+    var onChanged = opts.onChanged || function () {};
+
+    var state = {
+      open: false,
+      collapsed: false,
+      group: '*',
+      selectedId: null,
+      lastTier: 0,
+      askedIncomplete: false
+    };
+
+    /* ---------------- DOM ---------------- */
+
+    var win = el('div', 'pk-window');
+    win.id = 'picker-window';
+    win.hidden = true;
+
+    var bar = el('header', 'pk-bar');
+    var title = el('span', 'pk-title', '🖼 选图窗口');
+    var subtitle = el('span', 'pk-subtitle', '从图库里挑 11 张放到水果位上');
+    var barActions = el('div', 'pk-bar-actions');
+    var btnCollapse = el('button', 'btn btn-mini btn-ghost', '折叠');
+    btnCollapse.type = 'button';
+    var btnDefaults = el('button', 'btn btn-mini', '恢复默认');
+    btnDefaults.type = 'button';
+    var btnClose = el('button', 'btn btn-mini', '关闭');
+    btnClose.type = 'button';
+    barActions.appendChild(btnCollapse);
+    barActions.appendChild(btnDefaults);
+    barActions.appendChild(btnClose);
+    bar.appendChild(title);
+    bar.appendChild(subtitle);
+    bar.appendChild(barActions);
+
+    var body = el('div', 'pk-body');
+
+    // 左：11 个水果位
+    var colSlots = el('section', 'pk-col pk-col-slots');
+    var slotsHead = el('div', 'pk-col-head');
+    slotsHead.appendChild(el('b', null, '11 个水果位'));
+    slotsHead.appendChild(el('span', 'pk-head-hint', '颜色 = 水果 = 大小'));
+    var slotList = el('ol', 'pk-slots');
+    colSlots.appendChild(slotsHead);
+    colSlots.appendChild(slotList);
+
+    // 右：图片库
+    var colLib = el('section', 'pk-col pk-col-lib');
+    var libHead = el('div', 'pk-col-head');
+    libHead.appendChild(el('b', null, '图片库'));
+    var libStat = el('span', 'pk-head-hint', '');
+    libHead.appendChild(libStat);
+    var groupTabs = el('div', 'pk-groups');
+    var tileList = el('ol', 'pk-tiles');
+    colLib.appendChild(libHead);
+    colLib.appendChild(groupTabs);
+    colLib.appendChild(tileList);
+
+    body.appendChild(colSlots);
+    body.appendChild(colLib);
+
+    // 「还没选满」的提醒（贴在窗口里，不另外弹系统对话框）
+    var confirmBox = el('div', 'pk-confirm');
+    confirmBox.hidden = true;
+    var confirmCard = el('div', 'pk-confirm-card');
+    var confirmTitle = el('b', 'pk-confirm-title', '');
+    var confirmNote = el('span', 'pk-confirm-note', '没选的位子会沿用图库默认图（没有默认图就用 emoji 外观）。');
+    var confirmActions = el('div', 'pk-confirm-actions');
+    var btnKeepPicking = el('button', 'btn btn-primary', '继续选图');
+    btnKeepPicking.type = 'button';
+    var btnCloseAnyway = el('button', 'btn btn-ghost', '就这样关掉');
+    btnCloseAnyway.type = 'button';
+    confirmActions.appendChild(btnKeepPicking);
+    confirmActions.appendChild(btnCloseAnyway);
+    confirmCard.appendChild(confirmTitle);
+    confirmCard.appendChild(confirmNote);
+    confirmCard.appendChild(confirmActions);
+    confirmBox.appendChild(confirmCard);
+
+    win.appendChild(bar);
+    win.appendChild(body);
+    win.appendChild(confirmBox);
+    document.body.appendChild(win);
+
+    /* ---------------- 拖动 / 折叠 ---------------- */
+
+    var drag = null;
+    bar.addEventListener('pointerdown', function (e) {
+      if (e.target && e.target.tagName === 'BUTTON') return;
+      var rect = win.getBoundingClientRect();
+      drag = { dx: e.clientX - rect.left, dy: e.clientY - rect.top };
+      win.style.left = rect.left + 'px';
+      win.style.top = rect.top + 'px';
+      win.style.right = 'auto';
+      bar.setPointerCapture && bar.setPointerCapture(e.pointerId);
+    });
+    bar.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      var x = Math.max(0, Math.min((window.innerWidth || 1400) - 120, e.clientX - drag.dx));
+      var y = Math.max(0, Math.min((window.innerHeight || 900) - 40, e.clientY - drag.dy));
+      win.style.left = x + 'px';
+      win.style.top = y + 'px';
+    });
+    bar.addEventListener('pointerup', function () {
+      drag = null;
+    });
+
+    btnCollapse.addEventListener('click', function () {
+      state.collapsed = !state.collapsed;
+      win.classList.toggle('is-collapsed', state.collapsed);
+      btnCollapse.textContent = state.collapsed ? '展开' : '折叠';
+    });
+    btnClose.addEventListener('click', function () {
+      self.close();
+    });
+    btnDefaults.addEventListener('click', function () {
+      assets.resetToDefaults().then(function () {
+        state.selectedId = null;
+        self.render();
+        onChanged('reset');
+        ui && ui.toast && ui.toast('已恢复图库里的默认图像', 'ok');
+      });
+    });
+
+    btnKeepPicking.addEventListener('click', function () {
+      confirmBox.hidden = true;
+    });
+    btnCloseAnyway.addEventListener('click', function () {
+      confirmBox.hidden = true;
+      state.askedIncomplete = true;
+      self.close(true);
+    });
+
+    /* ---------------- 分组标签 ---------------- */
+
+    function renderGroups() {
+      groupTabs.textContent = '';
+      var groups = LIB.groupsOf(assets.library);
+      var all = el('button', 'pk-group', '全部');
+      all.type = 'button';
+      all.addEventListener('click', function () {
+        state.group = '*';
+        self.render();
+      });
+      groupTabs.appendChild(all);
+      groups.forEach(function (g) {
+        var b = el('button', 'pk-group', g.name);
+        b.type = 'button';
+        b.title = g.desc || '';
+        b.addEventListener('click', function () {
+          state.group = g.id;
+          self.render();
+        });
+        groupTabs.appendChild(b);
+      });
+      var buttons = groupTabs.children;
+      for (var i = 0; i < buttons.length; i++) {
+        var gid = i === 0 ? '*' : groups[i - 1] && groups[i - 1].id;
+        buttons[i].classList.toggle('is-on', gid === state.group);
+      }
+    }
+
+    /* ---------------- 11 个水果位 ---------------- */
+
+    function tierOfImage(imgId) {
+      for (var t = 1; t <= LIB.TIER_COUNT; t++) {
+        if (assets.idOf(t) === imgId) return t;
+      }
+      return 0;
+    }
+
+    function renderSlots() {
+      slotList.textContent = '';
+      LIB.slots().forEach(function (s) {
+        var li = el('li', 'pk-slot');
+        li.dataset.tier = String(s.tier);
+        li.style.setProperty('--c', s.color);
+        li.style.setProperty('--e', s.edge);
+
+        var colorBar = el('i', 'pk-slot-color');
+        var info = el('div', 'pk-slot-info');
+        var line1 = el('div', 'pk-slot-line1');
+        line1.appendChild(el('b', null, s.emoji + ' ' + s.name));
+        line1.appendChild(el('span', 'pk-slot-size', '⌀' + s.diameter));
+        var line2 = el('div', 'pk-slot-line2');
+        var img = assets.imageFor(s.tier);
+        var src = assets.sourceOf(s.tier);
+        line2.appendChild(el('span', 'pk-slot-file', img ? img.file : '还没选图'));
+        if (src === 'default') line2.appendChild(el('span', 'pk-slot-tag', '默认'));
+        if (src === 'pick') line2.appendChild(el('span', 'pk-slot-tag is-pick', '已选'));
+        info.appendChild(line1);
+        info.appendChild(line2);
+
+        var thumbSize = Math.max(26, Math.min(64, s.diameter * 0.24));
+        var thumb = el('div', 'pk-slot-thumb');
+        thumb.style.width = thumbSize + 'px';
+        thumb.style.height = thumbSize + 'px';
+        var chip = ui && ui.fruitChip ? ui.fruitChip(s.tier, assets, thumbSize) : null;
+        if (chip) thumb.appendChild(chip);
+
+        var hint = null;
+        if (img) {
+          var q = LIB.qualityHint(img, s.tier);
+          if (q && !q.ok) hint = el('span', 'pk-slot-warn', '⚠ ' + q.text);
+        }
+
+        var clearBtn = el('button', 'pk-slot-clear', '✕');
+        clearBtn.type = 'button';
+        clearBtn.title = '清空这一级（回到图库默认图）';
+        clearBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          assets.setTier(s.tier, null).then(function () {
+            onChanged('clear');
+            self.render();
+          });
+        });
+
+        li.appendChild(colorBar);
+        li.appendChild(thumb);
+        li.appendChild(info);
+        if (hint) li.appendChild(hint);
+        li.appendChild(clearBtn);
+
+        li.addEventListener('click', function () {
+          if (!state.selectedId) {
+            ui && ui.toast && ui.toast('先在右边点一张图片，再点这里放上去');
+            return;
+          }
+          applyTo(s.tier, state.selectedId);
+        });
+        li.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          li.classList.add('is-over');
+        });
+        li.addEventListener('dragleave', function () {
+          li.classList.remove('is-over');
+        });
+        li.addEventListener('drop', function (e) {
+          e.preventDefault();
+          li.classList.remove('is-over');
+          var id = e.dataTransfer && e.dataTransfer.getData('text/plain');
+          if (id) applyTo(s.tier, id);
+        });
+        if (state.lastTier === s.tier) li.classList.add('is-flash');
+
+        slotList.appendChild(li);
+      });
+    }
+
+    function applyTo(tier, imgId) {
+      assets.setTier(tier, imgId).then(function (res) {
+        if (!res.ok) {
+          ui && ui.toast && ui.toast('放不上去：' + res.error, 'bad');
+          return;
+        }
+        state.lastTier = tier;
+        state.selectedId = null;
+        onChanged('assign');
+        self.render();
+      });
+    }
+
+    /* ---------------- 图片库 ---------------- */
+
+    function renderTiles() {
+      tileList.textContent = '';
+      var images = LIB.imagesOf(assets.library, state.group);
+      libStat.textContent = images.length === (assets.library.images || []).length ? '' : images.length + ' 张';
+      if (!images.length) {
+        var empty = el('li', 'pk-empty');
+        empty.textContent = assets.library.images.length
+          ? '这个分组里还没有图片'
+          : '图片库还是空的 —— 等你把图片给我，我内嵌进来这里就满了（现在游戏用 emoji 默认外观）';
+        tileList.appendChild(empty);
+        return;
+      }
+      images.forEach(function (img) {
+        var tier = tierOfImage(img.id);
+        var li = el('li', 'pk-tile');
+        li.dataset.img = img.id;
+        li.draggable = true;
+        li.title = img.file + (img.w ? '（' + img.w + '×' + img.h + '）' : '');
+        if (tier) {
+          var slot = LIB.slotOf(tier);
+          li.style.setProperty('--c', slot.color);
+          li.style.setProperty('--e', slot.edge);
+          li.classList.add('is-assigned');
+        }
+        if (state.selectedId === img.id) li.classList.add('is-selected');
+
+        var pic = el('img', 'pk-tile-pic');
+        pic.src = img.src;
+        pic.alt = img.file;
+        pic.draggable = false;
+
+        li.appendChild(pic);
+        if (tier) {
+          // 颜色 + 水果 + 大小都标在图上：颜色 = 水果 = 这一级的大小
+          var slot2 = LIB.slotOf(tier);
+          var badge = el('span', 'pk-tile-badge', slot2.emoji + slot2.name + ' ⌀' + slot2.diameter);
+          badge.style.background = slot2.color;
+          badge.style.color = '#fff';
+          li.appendChild(badge);
+          var q = LIB.qualityHint(img, tier);
+          if (q && !q.ok) li.classList.add('is-warn');
+        }
+
+        li.addEventListener('click', function () {
+          state.selectedId = state.selectedId === img.id ? null : img.id;
+          self.render();
+        });
+        li.addEventListener('dblclick', function () {
+          // 双击 = 放到第一个空位（没有空位就放最后一级）
+          var target = 0;
+          for (var t = 1; t <= LIB.TIER_COUNT; t++) {
+            if (!assets.imageFor(t)) {
+              target = t;
+              break;
+            }
+          }
+          applyTo(target || LIB.TIER_COUNT, img.id);
+        });
+        li.addEventListener('dragstart', function (e) {
+          e.dataTransfer.setData('text/plain', img.id);
+          e.dataTransfer.effectAllowed = 'copy';
+        });
+
+        tileList.appendChild(li);
+      });
+    }
+
+    /* ---------------- 提示 ---------------- */
+
+    function renderHeaderHint() {
+      if (state.selectedId) {
+        var img = LIB.byId(assets.library, state.selectedId);
+        subtitle.textContent = '已选中 ' + (img ? img.file : '') + ' → 点左边的水果位放上去';
+        subtitle.classList.add('is-active');
+      } else {
+        subtitle.textContent = '从图库里挑 11 张放到水果位上';
+        subtitle.classList.remove('is-active');
+      }
+    }
+
+    function askIfIncomplete() {
+      // 图库是空的就不烦人（还没内嵌图片的时候，关窗口不该一直弹提示）
+      if (LIB.isComplete(assets.library, assets.pick())) return false;
+      var missing = LIB.missingSlots(assets.library, assets.pick());
+      if (!missing.length) return false;
+      var names = missing.map(function (t) {
+        return LIB.slotOf(t).emoji + LIB.slotOf(t).name;
+      });
+      confirmTitle.textContent = '还有 ' + missing.length + ' 个水果位没选图：' + names.join('、');
+      confirmBox.hidden = false;
+      return true;
+    }
+
+    /* ---------------- 对外 ---------------- */
+
+    var self = {
+      render: function () {
+        renderGroups();
+        renderSlots();
+        renderTiles();
+        renderHeaderHint();
+        return self;
+      },
+      open: function () {
+        state.open = true;
+        confirmBox.hidden = true;
+        win.hidden = false;
+        if (!win.style.left) {
+          // 默认停靠右侧，尽量不挡住游戏
+          var w = Math.min(820, (window.innerWidth || 1400) - 40);
+          win.style.width = w + 'px';
+          win.style.left = Math.max(12, (window.innerWidth || 1400) - w - 24) + 'px';
+          win.style.top = '74px';
+        }
+        self.render();
+        return self;
+      },
+      /** close(true) = 强制关闭（用户已经确认过「就这样关掉」） */
+      close: function (force) {
+        if (!force && state.open && !state.askedIncomplete && askIfIncomplete()) {
+          return self; // 先让用户看到「还没选满」的提醒
+        }
+        state.open = false;
+        confirmBox.hidden = true;
+        win.hidden = true;
+        return self;
+      },
+      toggle: function () {
+        return state.open ? self.close() : self.open();
+      },
+      isOpen: function () {
+        return state.open;
+      },
+      /** 有没有没选满（给测试和别处用） */
+      missing: function () {
+        return LIB.missingSlots(assets.library, assets.pick());
+      },
+      destroy: function () {
+        if (win.parentNode) win.parentNode.removeChild(win);
+      }
+    };
+
+    return self;
+  }
+
+  /* ---------------- 演示图库（临时用：还没有真图时也能看窗口效果） ---------------- */
+
+  /**
+   * 生成一个「多分组 + 不同尺寸」的占位图库，用来验证选图窗口。
+   * 真图片内嵌进来之后这个函数就不再被用到（只有 ?demo=1 才会调）。
+   */
+  function buildDemoLibrary() {
+    var groups = [
+      { id: 'g1', name: '圆润系', desc: '演示分组一：圆的、好认的' },
+      { id: 'g2', name: '写实系', desc: '演示分组二：带描边的' },
+      { id: 'g3', name: '扁平系', desc: '演示分组三：扁平的' }
+    ];
+    var palette = ['#e8483f', '#f2536b', '#8e5ad6', '#f79331', '#8bbf3f', '#e8402f', '#f7a6a0', '#e8c53f', '#c69a6d', '#c9e07a', '#3fae5a'];
+    var sizes = [128, 160, 192, 224, 256, 320, 384, 512];
+    var images = [];
+    var n = 0;
+    var i;
+
+    function push(canvas, file, group, w, h) {
+      n += 1;
+      images.push({ id: 'demo-' + n, file: file, group: group, w: w, h: h, src: canvas.toDataURL('image/png') });
+    }
+
+    for (i = 0; i < 8; i++) {
+      var s1 = sizes[i % sizes.length];
+      var c1 = document.createElement('canvas');
+      c1.width = s1;
+      c1.height = s1;
+      var g1 = c1.getContext('2d');
+      g1.fillStyle = palette[i % palette.length];
+      g1.beginPath();
+      g1.arc(s1 / 2, s1 / 2, s1 / 2 - 1, 0, Math.PI * 2);
+      g1.fill();
+      g1.fillStyle = 'rgba(255,255,255,0.85)';
+      g1.font = '700 ' + Math.round(s1 * 0.42) + 'px sans-serif';
+      g1.textAlign = 'center';
+      g1.textBaseline = 'middle';
+      g1.fillText('圆' + (i + 1), s1 / 2, s1 / 2 + s1 * 0.02);
+      push(c1, '圆润-' + String(i + 1).padStart(2, '0') + '.png', 'g1', s1, s1);
+    }
+    for (i = 0; i < 8; i++) {
+      var s2 = sizes[(i + 3) % sizes.length];
+      var c2 = document.createElement('canvas');
+      c2.width = s2;
+      c2.height = s2;
+      var g2 = c2.getContext('2d');
+      g2.fillStyle = '#ffffff';
+      g2.fillRect(0, 0, s2, s2);
+      g2.fillStyle = palette[(i + 4) % palette.length];
+      g2.beginPath();
+      g2.arc(s2 / 2, s2 / 2, s2 / 2 - Math.max(3, s2 * 0.06), 0, Math.PI * 2);
+      g2.fill();
+      g2.lineWidth = Math.max(2, s2 * 0.05);
+      g2.strokeStyle = 'rgba(0,0,0,0.35)';
+      g2.stroke();
+      g2.fillStyle = '#fff';
+      g2.font = '700 ' + Math.round(s2 * 0.34) + 'px sans-serif';
+      g2.textAlign = 'center';
+      g2.textBaseline = 'middle';
+      g2.fillText('实' + (i + 1), s2 / 2, s2 / 2 + s2 * 0.02);
+      push(c2, '写实-' + String(i + 1).padStart(2, '0') + '.png', 'g2', s2, s2);
+    }
+    for (i = 0; i < 6; i++) {
+      var w3 = [160, 220, 300, 360, 440, 520][i % 6];
+      var h3 = Math.round(w3 * 0.75); // 故意做成非正方形，验证等比裁切
+      var c3 = document.createElement('canvas');
+      c3.width = w3;
+      c3.height = h3;
+      var g3 = c3.getContext('2d');
+      g3.fillStyle = palette[(i + 7) % palette.length];
+      g3.beginPath();
+      g3.moveTo(w3 / 2, 4);
+      g3.lineTo(w3 - 4, h3 - 4);
+      g3.lineTo(4, h3 - 4);
+      g3.closePath();
+      g3.fill();
+      g3.fillStyle = 'rgba(255,255,255,0.9)';
+      g3.font = '700 ' + Math.round(h3 * 0.3) + 'px sans-serif';
+      g3.textAlign = 'center';
+      g3.textBaseline = 'middle';
+      g3.fillText('扁' + (i + 1), w3 / 2, h3 * 0.62);
+      push(c3, '扁平-' + String(i + 1).padStart(2, '0') + '.png', 'g3', w3, h3);
+    }
+
+    // 默认图像：只给前 8 级（演示「几张图当默认图像」的效果，顺便能看到没选满的提示）
+    var defaults = {};
+    for (var t = 1; t <= 8; t++) defaults[t] = images[(t - 1) % images.length].id;
+    var lib = LIB.normalize({ version: 1, builtAt: new Date().toISOString(), groups: groups, images: images, defaults: defaults });
+    root.SUIKA_IMAGE_LIBRARY = lib;
+    return lib;
+  }
+
+  root.SuikaPicker = { create: create, buildDemoLibrary: buildDemoLibrary };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/* ===== js/game.js ===== */
+﻿/*!
  * 合成大西瓜 · 主流程
  * 把引擎、渲染、界面、音效、排行榜串起来：开局 → 投放 → 合成计分 → 结束 → 上榜。
  */
@@ -4583,8 +5451,8 @@ window.SUIKA_BUILTIN_ASSETS = {
   var hudClock = 0;
   var best = 0;
   var prefs = { sound: true, player: '玩家', difficulty: CFG.DEFAULT_DIFFICULTY };
-  var slotPickerTier = 0;
   var sfx;
+  var picker = null;
   var demoMode = false;
   var sync = null;
   var syncClock = 0; // 每 200ms 加一，累计到 75（≈15 秒）刷新一次同步倒计时
@@ -5122,95 +5990,22 @@ window.SUIKA_BUILTIN_ASSETS = {
     frame(ts);
   }
 
-  /* ---------------- 贴图工坊 ---------------- */
+  /* ---------------- 选图 ---------------- */
 
   function refreshAssetViews() {
     UI.buildChain(dom.chain, assets);
     UI.updateChain(dom.chain, game.getState().maxTier, game.getState().tierCounts);
-    UI.renderSlots(dom.slots, slotOpts());
-    UI.renderAssetStatus(dom.assetStatus, assets.info());
     renderBoardView();
     syncHud();
+    if (picker && picker.isOpen()) picker.render();
   }
 
-  function slotOpts() {
-    return {
-      assets: assets,
-      onPick: function (tier) {
-        slotPickerTier = tier;
-        if (dom.fileSlot) {
-          dom.fileSlot.value = '';
-          dom.fileSlot.click();
-        }
-      },
-      onClear: function (tier) {
-        assets.clearSlot(tier);
-        UI.toast('已清除 Lv.' + tier + ' 的贴图', 'ok');
-      },
-      onDropFiles: function (tier, files) {
-        if (!files || !files.length) return;
-        assets.setFromFile(tier, files[0]).then(function (res) {
-          if (res.ok) UI.toast('Lv.' + tier + ' 贴图已更新', 'ok');
-          else UI.toast('导入失败：' + res.error, 'bad');
-        });
-      }
-    };
-  }
-
-  function openDrawer(open) {
-    var drawer = dom.drawer;
-    var scrim = dom.scrim;
-    if (!drawer) return;
-    var willOpen = open == null ? !drawer.classList.contains('is-open') : !!open;
-    drawer.classList.toggle('is-open', willOpen);
-    drawer.setAttribute('aria-hidden', String(!willOpen));
-    if (scrim) scrim.hidden = !willOpen;
-    if (willOpen) {
-      UI.renderSlots(dom.slots, slotOpts());
-      UI.renderAssetStatus(dom.assetStatus, assets.info());
-    }
-  }
-
-  function pickSlotFile(files) {
-    if (!files || !files.length) return;
-    var tier = slotPickerTier || 1;
-    assets.setFromFile(tier, files[0]).then(function (res) {
-      if (res.ok) UI.toast('Lv.' + tier + ' 贴图已更新', 'ok');
-      else UI.toast('导入失败：' + (res.error === 'locked' ? '最终版已锁定，不能再改图片' : res.error), 'bad');
-    });
-  }
-
-  function pickPack(files) {
-    if (!files || !files.length) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      var res = assets.importPack(String(reader.result));
-      if (res.ok) UI.toast('贴图包导入成功：' + res.count + ' 张', 'ok');
-      else UI.toast('贴图包导入失败：' + res.error, 'bad');
-    };
-    reader.readAsText(files[0]);
-  }
-
-  function pickBatch(files) {
-    if (!files || !files.length) return;
-    UI.toast('正在处理 ' + files.length + ' 张图片…');
-    assets.importFiles(files).then(function (res) {
-      var msg = res.assigned.length ? '成功导入 ' + res.assigned.length + ' 张' : '没有识别到可用的图片';
-      if (res.unmatched.length) msg += '；未识别 ' + res.unmatched.length + ' 张（文件名带 01~11 或水果名即可自动分配）';
-      UI.toast(msg, res.assigned.length ? 'ok' : 'bad');
-    });
-  }
-
-  function exportPack() {
-    var info = assets.info();
-    if (!info.filled) {
-      UI.toast('还没有导入任何水果图片，导出的包是空的', 'bad');
-      return;
-    }
-    var text = assets.exportPack();
-    var stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 16);
-    UI.download('suika-assets-' + stamp + '.json', text);
-    UI.toast('贴图包已导出（' + info.filled + ' 张，指纹 ' + info.fingerprint + '），把它发给我即可整合最终版', 'ok');
+  /** 打开/关闭「选图小窗口」 */
+  function openPicker(open) {
+    if (!picker) return;
+    var willOpen = open == null ? !picker.isOpen() : !!open;
+    if (willOpen) picker.open();
+    else picker.close();
   }
 
   /* ---------------- 事件绑定 ---------------- */
@@ -5254,7 +6049,7 @@ window.SUIKA_BUILTIN_ASSETS = {
       } else if (e.key === 'r' || e.key === 'R') {
         startRound();
       } else if (e.key === 'Escape') {
-        openDrawer(false);
+        openPicker(false);
       }
     });
 
@@ -5269,65 +6064,10 @@ window.SUIKA_BUILTIN_ASSETS = {
         UI.toast(prefs.sound ? '音效已打开' : '音效已关闭');
       });
     }
-    if (dom.workshop) {
-      dom.workshop.addEventListener('click', function () {
-        openDrawer();
-      });
-    }
-    if (dom.drawerClose) dom.drawerClose.addEventListener('click', function () { openDrawer(false); });
-    if (dom.scrim) dom.scrim.addEventListener('click', function () { openDrawer(false); });
-
-    if (dom.fileSlot) {
-      dom.fileSlot.addEventListener('change', function () {
-        pickSlotFile(dom.fileSlot.files);
-      });
-    }
-    if (dom.fileBatch) {
-      dom.fileBatch.addEventListener('change', function () {
-        pickBatch(dom.fileBatch.files);
-        dom.fileBatch.value = '';
-      });
-    }
-    if (dom.filePack) {
-      dom.filePack.addEventListener('change', function () {
-        pickPack(dom.filePack.files);
-        dom.filePack.value = '';
-      });
-    }
-
-    if (dom.batch) dom.batch.addEventListener('click', function () { dom.fileBatch && dom.fileBatch.click(); });
-    if (dom.importPack) dom.importPack.addEventListener('click', function () { dom.filePack && dom.filePack.click(); });
-    if (dom.exportPack) dom.exportPack.addEventListener('click', exportPack);
-    if (dom.clearAssets) {
-      dom.clearAssets.addEventListener('click', function () {
-        if (!assets.info().filled) {
-          UI.toast('现在没有导入任何贴图');
-          return;
-        }
-        if (root.confirm('确定清除所有已导入的水果贴图，回到默认 emoji 外观吗？')) {
-          assets.clearAll();
-          UI.toast('已清除全部贴图', 'ok');
-        }
-      });
-    }
-    if (dom.lockBtn) {
-      dom.lockBtn.addEventListener('click', function () {
-        var info = assets.info();
-        if (info.customLocked) {
-          if (root.confirm('解锁后可以继续修改图片，确定解锁吗？')) {
-            assets.setLocked(false);
-            UI.toast('已解锁，可以继续修改贴图');
-          }
-          return;
-        }
-        if (!info.filled) {
-          UI.toast('还没有导入图片，先导入再锁定吧', 'bad');
-          return;
-        }
-        if (root.confirm('锁定后这份贴图会被视为「最终提交版本」。确定锁定吗？（锁定只是标记，真正的不可修改是整合进最终版后）')) {
-          assets.setLocked(true);
-          UI.toast('已标记为最终版，记得导出贴图包交给我', 'ok');
-        }
+    // 选图小窗口
+    if (dom.pickerBtn) {
+      dom.pickerBtn.addEventListener('click', function () {
+        openPicker();
       });
     }
 
@@ -5373,22 +6113,6 @@ window.SUIKA_BUILTIN_ASSETS = {
       });
     }
 
-    var wrap = dom.canvas.parentNode;
-    if (wrap) {
-      ['dragenter', 'dragover'].forEach(function (ev) {
-        wrap.addEventListener(ev, function (e) {
-          e.preventDefault();
-        });
-      });
-      wrap.addEventListener('drop', function (e) {
-        e.preventDefault();
-        var files = e.dataTransfer && e.dataTransfer.files;
-        if (!files || !files.length) return;
-        if (/\.json$/i.test(files[0].name)) pickPack(files);
-        else pickBatch(files);
-      });
-    }
-
     root.addEventListener('resize', function () {
       setAim(aimX);
     });
@@ -5410,20 +6134,7 @@ window.SUIKA_BUILTIN_ASSETS = {
     dom.pause = UI.el('btn-pause');
     dom.restart = UI.el('btn-restart');
     dom.sound = UI.el('btn-sound');
-    dom.workshop = UI.el('btn-workshop');
-    dom.drawer = UI.el('drawer');
-    dom.drawerClose = UI.el('drawer-close');
-    dom.scrim = UI.el('scrim');
-    dom.slots = UI.el('slots');
-    dom.assetStatus = UI.el('asset-status');
-    dom.batch = UI.el('btn-batch');
-    dom.importPack = UI.el('btn-import-pack');
-    dom.exportPack = UI.el('btn-export-pack');
-    dom.clearAssets = UI.el('btn-clear-assets');
-    dom.lockBtn = UI.el('btn-lock');
-    dom.fileSlot = UI.el('file-slot');
-    dom.fileBatch = UI.el('file-batch');
-    dom.filePack = UI.el('file-pack');
+    dom.pickerBtn = UI.el('btn-picker');
     dom.lbList = UI.el('lb-list');
     dom.lbClear = UI.el('lb-clear');
     dom.lbNote = UI.el('lb-note');
@@ -5467,7 +6178,8 @@ window.SUIKA_BUILTIN_ASSETS = {
         ' 分钟自动刷新）。' +
         (root.SUIKA_STANDALONE ? '' : '用「启动游戏.cmd」打开也一样是全球榜。') +
         '</li>' +
-        '<li>水果图片可以在「贴图工坊」里导入，导好之后导出贴图包交给我，就能整合成最终版。</li>' +
+        '<li>水果图片来自内置图库：点右上角 <b>🖼 选图</b> 打开小窗口，从图库里挑 11 张放进水果位'
+        + '（图片不用自己导入）。</li>' +
         '</ul>',
       actions: [{ label: '开始游戏', kind: 'primary', onClick: startRound }]
     });
@@ -5519,35 +6231,6 @@ window.SUIKA_BUILTIN_ASSETS = {
     syncHud();
   }
 
-  /** 演示用贴图：11 张「圆形+等级数字」的图片，用来检查贴图渲染链路（?demo=1&panel=1） */
-  function demoArtPack() {
-    if (!D.createElement) return;
-    var slots = [];
-    CFG.TIERS.forEach(function (t) {
-      var c = D.createElement('canvas');
-      c.width = 300; // 故意用非正方形的图，顺便验证等比裁切
-      c.height = 200;
-      var g = c.getContext('2d');
-      var grd = g.createLinearGradient(0, 20, 0, 180);
-      grd.addColorStop(0, '#ffffff');
-      grd.addColorStop(1, t.color);
-      g.fillStyle = grd;
-      g.beginPath();
-      g.ellipse(150, 100, 94, 94, 0, 0, Math.PI * 2);
-      g.fill();
-      g.lineWidth = 8;
-      g.strokeStyle = t.edge;
-      g.stroke();
-      g.fillStyle = t.edge;
-      g.font = '700 104px "PingFang SC","Microsoft YaHei",sans-serif';
-      g.textAlign = 'center';
-      g.textBaseline = 'middle';
-      g.fillText(String(t.tier), 150, 106);
-      slots.push({ tier: t.tier, key: t.key, name: t.name, file: CFG.suggestFileName(t), dataUrl: c.toDataURL('image/png') });
-    });
-    assets.importPack({ slots: slots });
-  }
-
   function boot() {
     cacheDom();
     demoMode = /[?&]demo=1/.test(root.location.search);
@@ -5557,6 +6240,13 @@ window.SUIKA_BUILTIN_ASSETS = {
 
     prefs = Object.assign({ sound: true, player: '玩家', difficulty: CFG.DEFAULT_DIFFICULTY }, loadJson(CFG.STORAGE_KEYS.prefs, {}));
     prefs.difficulty = CFG.clampDifficulty(prefs.difficulty);
+
+    // ?demo=1&lib=demo ：还没有真图时，生成一个「多分组 + 不同尺寸」的占位图库，
+    // 用来验证选图窗口（真图片内嵌进来之后就不需要它了）
+    var demoLib = demoMode && !/[?&]lib=none/.test(root.location.search);
+    if (demoLib && root.SuikaPicker && root.SuikaPicker.buildDemoLibrary) {
+      root.SuikaPicker.buildDemoLibrary();
+    }
 
     assets = AS.create({ storage: store });
     game = EN.create({ difficulty: prefs.difficulty });
@@ -5614,8 +6304,6 @@ window.SUIKA_BUILTIN_ASSETS = {
 
     UI.buildChain(dom.chain, assets);
     UI.updateChain(dom.chain, 1, {});
-    UI.renderSlots(dom.slots, slotOpts());
-    UI.renderAssetStatus(dom.assetStatus, assets.info());
     renderBoardView();
     if (dom.lbNote) {
       dom.lbNote.innerHTML =
@@ -5627,6 +6315,15 @@ window.SUIKA_BUILTIN_ASSETS = {
     }
 
     syncDiffUi();
+    // 选图小窗口（图片全部来自内嵌图库，不做导入）
+    picker = root.SuikaPicker.create({
+      assets: assets,
+      ui: UI,
+      onChanged: function () {
+        // 换图后：进化表色块、HUD 预览、画布上的水果都要跟着变
+        refreshAssetViews();
+      }
+    });
     wire();
     showReadyOverlay();
     syncHud();
@@ -5658,10 +6355,11 @@ window.SUIKA_BUILTIN_ASSETS = {
         game.setDifficulty(prefs.difficulty);
         syncDiffUi();
       }
+      // ?demo=1&panel=1 ：演示用，直接打开选图窗口
       if (/[?&]panel=1/.test(root.location.search)) {
-        demoArtPack();
-        if (dom.drawer) dom.drawer.style.transition = 'none'; // 演示用：跳过滑入动画，方便直接看全貌
-        openDrawer(true);
+        openPicker(true);
+        // ?demo=1&panel=1&close=1 ：再试一次关闭 → 没选满就会弹出提醒（自检/截图用）
+        if (/[?&]close=1/.test(root.location.search)) openPicker(false);
       }
       demoSeed();
       // ?demo=1&over=1 ：直接演示「本局结束 → 提交上榜」的流程
@@ -5669,6 +6367,17 @@ window.SUIKA_BUILTIN_ASSETS = {
       // ?demo=1&pump=120 ：同步跑 120 帧（≈2 秒），把 HUD/计时/同步倒计时这些
       // 「要跑一会儿才会执行到」的代码路径提前跑到 —— 自检和截图都用它，
       // 否则报错会发生在截图之后，看不到。
+      // ?demo=1&squash=0.28 ：把所有水果置成「正在被压」的状态并重绘一帧，
+      // 用来给截图/自检看挤压形变（真实游戏里这是撞出来的，不是摆出来的）
+      var sm = /[?&]squash=([\d.]+)/.exec(root.location.search);
+      if (sm) {
+        var kk = Math.min(CFG.RULES.jelly.squashMax, parseFloat(sm[1]) || 0.25);
+        game.fruits().forEach(function (f, i) {
+          f.suikaSq = kk;
+          f.suikaSqA = i % 2 === 0 ? 0 : Math.PI / 2;
+        });
+        render.draw(buildFrame());
+      }
       var pm = /[?&]pump=(\d+)/.exec(root.location.search);
       if (pm) {
         var n = Math.min(900, Math.max(1, parseInt(pm[1], 10) || 120));

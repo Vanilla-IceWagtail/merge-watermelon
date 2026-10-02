@@ -1,24 +1,22 @@
 /*!
- * 合成大西瓜 · 最终内嵌贴图（占位）
+ * 合成大西瓜 · 内嵌图片库（占位，等你的图片）
  *
- * 这个文件现在是空的，所有水果都用默认 emoji 外观。
- * 等你在「贴图工坊」里导好图片并导出贴图包交给我之后，
- * 我会把图片以 base64 的形式填进 slots、把 locked 改成 true、写上 integratedAt，
- * 之后游戏固定使用内嵌图片，界面上的导入功能会自动关闭 —— 图片就不可再改了。
+ * 这里就是「图片库」本体：游戏不带任何导入功能，图片全部内嵌在这个文件里，
+ * 用户在「选图小窗口」里从图库里挑 11 张放到 11 个水果位上。
  *
- * 结构示例（tier 为 1~11）：
- *   window.SUIKA_BUILTIN_ASSETS = {
- *     packVersion: 1,
- *     locked: true,
- *     integratedAt: '2025-01-01T00:00:00.000Z',
- *     fingerprint: '0123456789abcdef',
- *     slots: { 1: { dataUrl: 'data:image/webp;base64,...', file: '01-cherry.webp' }, ... }
- *   };
+ * 现在图库是空的（游戏用 emoji 默认外观）。等你把图片交给我之后，我会：
+ *   1. 把每张图压缩成 WebP 并转成 base64，填进 images；
+ *   2. 按你的说明填好 groups（分组）和每张图的 group；
+ *   3. 把你指定的那几张默认图填进 defaults（{ '1':'i01', ... } 表示第 1 级默认用 i01）；
+ *   4. 写上 builtAt 和 fingerprint（指纹）。
+ *
+ * images 里每张图的字段：
+ *   { id:'i01', file:'01-cherry.png', group:'g1', w:512, h:512, note:'', src:'data:image/webp;base64,...' }
  */
-window.SUIKA_BUILTIN_ASSETS = {
-  packVersion: 1,
-  locked: false,
-  integratedAt: null,
-  fingerprint: null,
-  slots: {}
+window.SUIKA_IMAGE_LIBRARY = {
+  version: 0,
+  builtAt: null,
+  groups: [],
+  images: [],
+  defaults: {}
 };

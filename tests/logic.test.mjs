@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · 逻辑测试（node --test）
  *
  *   cd "C:\Users\极光\Desktop\合成大西瓜"
@@ -17,28 +17,12 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(here, '..');
 
 const CFG = require(path.join(ROOT, 'js/config.js'));
-const ASSETS = require(path.join(ROOT, 'js/assets.js'));
-const ENGINE = require(path.join(ROOT, 'js/engine.js'));
 
-const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==';
+const ENGINE = require(path.join(ROOT, 'js/engine.js'));
 
 function runSteps(game, ms, step = CFG.BOARD.fixedStep) {
   const n = Math.round(ms / step);
   for (let i = 0; i < n; i++) game.step(step);
-}
-
-function fakeStorage(initial = {}) {
-  const data = { ...initial };
-  return {
-    getItem: (k) => (k in data ? data[k] : null),
-    setItem: (k, v) => {
-      data[k] = String(v);
-    },
-    removeItem: (k) => {
-      delete data[k];
-    },
-    _data: data
-  };
 }
 
 /* ---------------- 配置与计分规则 ---------------- */
@@ -365,57 +349,80 @@ test('高速下落的漏过危险线不会误判结束', () => {
  * 现在只有一份榜单实现，测试都在 tests/boards.test.mjs 和 tests/sync.test.mjs 里。
  */
 
-/* ---------------- 贴图包 ---------------- */
+/* ---------------- 贴图（图片库） ---------------- */
 
-test('贴图包：文件名能自动对应到水果等级', () => {
-  assert.equal(ASSETS.matchTier('01-cherry.png'), 1);
-  assert.equal(ASSETS.matchTier('2.png'), 2);
-  assert.equal(ASSETS.matchTier('03.webp'), 3);
-  assert.equal(ASSETS.matchTier('strawberry.jpg'), 2);
-  assert.equal(ASSETS.matchTier('葡萄.webp'), 3);
-  assert.equal(ASSETS.matchTier('watermelon.png'), 11);
-  assert.equal(ASSETS.matchTier('不知道是什么.png'), 0);
-  assert.equal(ASSETS.matchTier('12.png'), 0, '超出 11 级不算');
+/*
+ * 「导入贴图包」这套功能已经删掉了：图片全部内嵌在图库里，用户只在「选图小窗口」里挑 11 张。
+ * 图库与选图的测试在 tests/library.test.mjs。
+ */
+
+/* ---------------- 果冻手感（QQ 弹弹） ---------------- */
+
+test('果冻：低速贴住不给弹性（堆叠不微弹），高速撞击才弹并产生挤压形变', () => {
+  const game = ENGINE.create({ enableSleeping: false });
+  const def = CFG.tierByNumber(3);
+  // 从很低的地方丢下来：落到地面时速度很低 → 不该产生挤压形变
+  game.drop(CFG.BOARD.width / 2, 1);
+  runSteps(game, 400);
+  const slowPeak = Math.max(...game.fruits().map((f) => f.suikaSq || 0));
+
+  // 从很高的地方丢：撞地速度大 → 要有明显挤压
+  const game2 = ENGINE.create({ enableSleeping: false });
+  const body = game2.debugSpawn(3, CFG.BOARD.width / 2, CFG.BOARD.spawnY);
+  let peak = 0;
+  for (let i = 0; i < 200; i++) {
+    game2.step(CFG.BOARD.fixedStep);
+    peak = Math.max(peak, body.suikaSq || 0);
+  }
+  assert.ok(peak > 0.02, '掉下来砸到地面应该压一下，实际 ' + peak.toFixed(3));
+  assert.ok(peak <= CFG.RULES.jelly.squashMax + 1e-6, '不超过上限');
+  assert.ok(slowPeak <= CFG.RULES.jelly.squashMax, '低速也不该超过上限');
 });
 
-test('贴图包：解析导出格式 / 键值格式 / 数组格式，并挡掉非法数据', () => {
-  const exported = {
-    app: 'suika-game',
-    slots: [
-      { tier: 1, key: 'cherry', name: '樱桃', dataUrl: PNG, file: '01-cherry.png' },
-      { tier: 11, key: 'watermelon', name: '西瓜', dataUrl: PNG }
-    ]
-  };
-  const a = ASSETS.normalizePack(exported);
-  assert.equal(a.ok, true);
-  assert.equal(a.count, 2);
-  assert.equal(a.slots[1].file, '01-cherry.png');
-  assert.equal(a.slots[11].mime, 'image/png');
-
-  const b = ASSETS.normalizePack({ slots: { 3: PNG, grape: PNG } });
-  assert.equal(b.count, 1, '两种写法指向同一级，只保留一个');
-
-  const c = ASSETS.normalizePack([{ tier: 5, dataUrl: PNG }, { tier: 99, dataUrl: PNG }, { tier: 6, dataUrl: 'http://x/a.png' }]);
-  assert.equal(c.count, 1);
-  assert.equal(c.rejected, 2);
-
-  const d = ASSETS.normalizePack('{不是 json');
-  assert.equal(d.ok, false);
-  assert.equal(ASSETS.normalizePack({ slots: [] }).ok, false);
-  assert.equal(ASSETS.normalizePack(JSON.stringify(exported)).count, 2, '也应支持 JSON 文本');
+test('果冻：挤压形变会自己衰减掉（不会一直扁着）', () => {
+  const game = ENGINE.create({ enableSleeping: false });
+  const body = game.debugSpawn(4, CFG.BOARD.width / 2, CFG.BOARD.spawnY);
+  let peak = 0;
+  for (let i = 0; i < 200; i++) {
+    game.step(CFG.BOARD.fixedStep);
+    peak = Math.max(peak, body.suikaSq || 0);
+  }
+  assert.ok(peak > 0, '应该有挤压过');
+  runSteps(game, 1500); // 1.5 秒后
+  const def = CFG.tierByNumber(4);
+  const fresh = game.fruits().find((f) => f.suikaTier === 4);
+  assert.ok(!fresh || (fresh.suikaSq || 0) < 0.01, '形变要衰减到接近 0，实际 ' + (fresh ? fresh.suikaSq : 'n/a'));
 });
 
-test('贴图包：指纹稳定，能用来确认「就是这一版」', () => {
-  const slotsA = { 1: { dataUrl: PNG }, 2: { dataUrl: PNG + 'AAA' } };
-  const slotsB = { 2: { dataUrl: PNG + 'AAA' }, 1: { dataUrl: PNG } };
-  assert.equal(ASSETS.fingerprint(slotsA), ASSETS.fingerprint(slotsB), '顺序不同指纹应一致');
-  assert.match(ASSETS.fingerprint(slotsA), /^[0-9a-f]{16}$/);
-  assert.notEqual(ASSETS.fingerprint(slotsA), ASSETS.fingerprint({ 1: { dataUrl: PNG } }));
-  assert.equal(ASSETS.fingerprint({}), '--------');
+test('果冻：参数在 config 里，且回弹系数高于原来的 0.12', () => {
+  assert.ok(CFG.RULES.jelly, '要有 jelly 参数');
+  assert.ok(CFG.RULES.jelly.restitution > 0.12);
+  assert.ok(CFG.RULES.jelly.bounceThreshold > 0);
+  assert.ok(CFG.RULES.jelly.squashDecay > 0);
 });
 
-test('贴图包：字节数算得对（用来提示存储占用）', () => {
-  assert.equal(ASSETS.byteLength('data:image/png;base64,AAAA'), 3);
-  assert.ok(ASSETS.byteLength(PNG) > 0);
-  assert.equal(ASSETS.byteLength(''), 0);
+test('果冻：形变会过冲（弹过头变成微微拉长）再回摆停住，不是单调衰减', () => {
+  const game = ENGINE.create({ enableSleeping: false });
+  const body = game.debugSpawn(5, CFG.BOARD.width / 2, CFG.BOARD.spawnY);
+  let minSq = 0;
+  let maxSq = 0;
+  let crosses = 0;
+  let prev = 0;
+  for (let i = 0; i < 240; i++) {
+    game.step(CFG.BOARD.fixedStep);
+    const sq = body.suikaSq || 0;
+    maxSq = Math.max(maxSq, sq);
+    minSq = Math.min(minSq, sq);
+    if (prev > 0.002 && sq < -0.002) crosses += 1; // 从「压扁」越过 0 到「拉长」
+    prev = sq;
+  }
+  assert.ok(maxSq > 0.02, '撞击要先压扁，实际峰值 ' + maxSq.toFixed(3));
+  assert.ok(minSq < -0.002, '要弹过头（出现负形变 = 拉长），实际最小 ' + minSq.toFixed(3));
+  assert.ok(crosses >= 1, '至少要过一次零点（回摆）');
+  assert.ok(maxSq <= CFG.RULES.jelly.squashMax + 1e-6, '压扁不超过上限');
+  assert.ok(minSq >= -CFG.RULES.jelly.stretchMax - 1e-6, '拉长不超过上限');
+  // 2 秒后必须停下来（不能一直晃）
+  runSteps(game, 2000);
+  const f = game.fruits().find((x) => x.suikaTier === 5);
+  assert.ok(!f || Math.abs(f.suikaSq || 0) < 0.01, '晃完要停，实际 ' + (f ? f.suikaSq : 'n/a'));
 });

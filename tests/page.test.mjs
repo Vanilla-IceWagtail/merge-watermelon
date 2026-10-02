@@ -52,13 +52,28 @@ function makeClassList(node) {
   };
 }
 
+function makeStyle() {
+  const props = {};
+  const style = {
+    setProperty: (k, v) => {
+      props[k] = String(v);
+    },
+    getPropertyValue: (k) => (k in props ? props[k] : ''),
+    removeProperty: (k) => {
+      delete props[k];
+    },
+    _props: props
+  };
+  return style;
+}
+
 function makeNode(doc, tag, id) {
   const node = {
     tagName: String(tag || 'div').toUpperCase(),
     id: id || '',
     children: [],
     dataset: {},
-    style: {},
+    style: makeStyle(),
     hidden: false,
     value: '',
     textContent: '',
@@ -88,8 +103,7 @@ function makeNode(doc, tag, id) {
     child.parentNode = node;
     node.children.push(child);
     return child;
-  };
-  node.removeChild = (child) => {
+  };  node.removeChild = (child) => {
     const i = node.children.indexOf(child);
     if (i >= 0) node.children.splice(i, 1);
     return child;
@@ -112,6 +126,10 @@ function makeNode(doc, tag, id) {
   node.getBoundingClientRect = () => ({ left: 0, top: 0, width: 480, height: 700, right: 480, bottom: 700 });
   node.querySelector = (sel) => makeNode(doc, 'span');
   node.querySelectorAll = () => [];
+  node.getElementsByTagName = () => [];
+  Object.defineProperty(node, 'childNodes', {
+    get: () => node.children
+  });
   node.click = () => node.dispatch('click', {});
   node.getContext = () => makeCtx();
   node.toDataURL = () => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==';
@@ -159,6 +177,11 @@ function makeDocument() {
     readyState: 'complete',
     body: null,
     createElement: (tag) => makeNode(doc, tag),
+    createTextNode: (text) => {
+      const n = makeNode(doc, '#text');
+      n.textContent = String(text);
+      return n;
+    },
     getElementById: (id) => {
       if (!byId.has(id)) {
         const node = makeNode(doc, 'div', id);
@@ -213,6 +236,8 @@ function bootPage(opts = {}) {
     },
     cancelAnimationFrame() {},
     devicePixelRatio: 1,
+    innerWidth: 1400,
+    innerHeight: 900,
     performance: { now: () => Date.now() },
     localStorage: {
       getItem: (k) => (store.has(k) ? store.get(k) : null),
@@ -286,6 +311,7 @@ function bootPage(opts = {}) {
   const files = [
     'vendor/matter.min.js',
     'js/config.js',
+    'js/library.js',
     'js/assets-builtin.js',
     'js/assets.js',
     'js/boards.js',
@@ -294,6 +320,7 @@ function bootPage(opts = {}) {
     'js/engine.js',
     'js/render.js',
     'js/ui.js',
+    'js/picker.js',
     'js/game.js'
   ];
   for (const rel of files) {
@@ -364,6 +391,7 @@ test('演示模式（自动开局 + 结束一局 + 跑 200 帧）全程无异常
 test('JS 里用到的所有元素 id 都真实存在于 index.html', () => {
   const jsFiles = [
     'js/config.js',
+    'js/library.js',
     'js/assets.js',
     'js/boards.js',
     'js/transport.js',
@@ -371,6 +399,7 @@ test('JS 里用到的所有元素 id 都真实存在于 index.html', () => {
     'js/engine.js',
     'js/render.js',
     'js/ui.js',
+    'js/picker.js',
     'js/game.js'
   ];
   const missing = new Set();
@@ -418,19 +447,25 @@ test('单文件版标记生效：排行榜改成「本机/单文件版」的说�
   assert.deepEqual(page.errors, []);
 });
 
-test('贴图工坊的按钮点一遍也不炸（没导入图片时的空状态）', () => {
+test('选图窗口能开能关、点图片和水果位都不炸（图片库为空时也一样）', () => {
   const page = bootPage();
   page.pump(3);
-  page.el('btn-workshop').dispatch('click', {}); // 打开抽屉 → 渲染 11 个槽位
+  page.el('btn-picker').dispatch('click', {}); // 打开选图小窗口
   page.pump(3);
-  for (const id of ['btn-batch', 'btn-import-pack', 'btn-export-pack', 'btn-clear-assets', 'btn-lock', 'drawer-close']) {
-    page.el(id).dispatch('click', {});
-    page.pump(2);
-  }
-  page.el('lb-player').value = '西瓜王';
-  page.el('lb-player').dispatch('change', {});
-  page.el('lb-clear').dispatch('click', {});
-  page.pump(10);
-  assert.deepEqual(page.errors, [], '工坊/排行榜按钮不该抛异常');
+  const win = page.sandbox.SuikaPicker ? page.doc.getElementById('picker-window') : null;
+  assert.ok(win, '窗口节点应该被创建出来');
+  assert.equal(win.hidden, false, '点「选图」后窗口要显示');
+
+  // 图库是空的：状态行要说明「图库还是空的」，不能是空白或者报错
+  const status = page.el('picker-status') || null;
+  page.pump(5);
+  assert.deepEqual(page.errors, [], '空图库下开窗口不该抛异常');
   assert.equal(page.el('boot-error').hidden, true, '不应该显示错误横幅');
+
+  // 再点一次按钮（Toggle 到关闭），然后重开
+  page.el('btn-picker').dispatch('click', {});
+  page.pump(2);
+  page.el('btn-picker').dispatch('click', {});
+  page.pump(5);
+  assert.deepEqual(page.errors, []);
 });

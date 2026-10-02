@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · 主流程
  * 把引擎、渲染、界面、音效、排行榜串起来：开局 → 投放 → 合成计分 → 结束 → 上榜。
  */
@@ -41,8 +41,8 @@
   var hudClock = 0;
   var best = 0;
   var prefs = { sound: true, player: '玩家', difficulty: CFG.DEFAULT_DIFFICULTY };
-  var slotPickerTier = 0;
   var sfx;
+  var picker = null;
   var demoMode = false;
   var sync = null;
   var syncClock = 0; // 每 200ms 加一，累计到 75（≈15 秒）刷新一次同步倒计时
@@ -580,95 +580,22 @@
     frame(ts);
   }
 
-  /* ---------------- 贴图工坊 ---------------- */
+  /* ---------------- 选图 ---------------- */
 
   function refreshAssetViews() {
     UI.buildChain(dom.chain, assets);
     UI.updateChain(dom.chain, game.getState().maxTier, game.getState().tierCounts);
-    UI.renderSlots(dom.slots, slotOpts());
-    UI.renderAssetStatus(dom.assetStatus, assets.info());
     renderBoardView();
     syncHud();
+    if (picker && picker.isOpen()) picker.render();
   }
 
-  function slotOpts() {
-    return {
-      assets: assets,
-      onPick: function (tier) {
-        slotPickerTier = tier;
-        if (dom.fileSlot) {
-          dom.fileSlot.value = '';
-          dom.fileSlot.click();
-        }
-      },
-      onClear: function (tier) {
-        assets.clearSlot(tier);
-        UI.toast('已清除 Lv.' + tier + ' 的贴图', 'ok');
-      },
-      onDropFiles: function (tier, files) {
-        if (!files || !files.length) return;
-        assets.setFromFile(tier, files[0]).then(function (res) {
-          if (res.ok) UI.toast('Lv.' + tier + ' 贴图已更新', 'ok');
-          else UI.toast('导入失败：' + res.error, 'bad');
-        });
-      }
-    };
-  }
-
-  function openDrawer(open) {
-    var drawer = dom.drawer;
-    var scrim = dom.scrim;
-    if (!drawer) return;
-    var willOpen = open == null ? !drawer.classList.contains('is-open') : !!open;
-    drawer.classList.toggle('is-open', willOpen);
-    drawer.setAttribute('aria-hidden', String(!willOpen));
-    if (scrim) scrim.hidden = !willOpen;
-    if (willOpen) {
-      UI.renderSlots(dom.slots, slotOpts());
-      UI.renderAssetStatus(dom.assetStatus, assets.info());
-    }
-  }
-
-  function pickSlotFile(files) {
-    if (!files || !files.length) return;
-    var tier = slotPickerTier || 1;
-    assets.setFromFile(tier, files[0]).then(function (res) {
-      if (res.ok) UI.toast('Lv.' + tier + ' 贴图已更新', 'ok');
-      else UI.toast('导入失败：' + (res.error === 'locked' ? '最终版已锁定，不能再改图片' : res.error), 'bad');
-    });
-  }
-
-  function pickPack(files) {
-    if (!files || !files.length) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      var res = assets.importPack(String(reader.result));
-      if (res.ok) UI.toast('贴图包导入成功：' + res.count + ' 张', 'ok');
-      else UI.toast('贴图包导入失败：' + res.error, 'bad');
-    };
-    reader.readAsText(files[0]);
-  }
-
-  function pickBatch(files) {
-    if (!files || !files.length) return;
-    UI.toast('正在处理 ' + files.length + ' 张图片…');
-    assets.importFiles(files).then(function (res) {
-      var msg = res.assigned.length ? '成功导入 ' + res.assigned.length + ' 张' : '没有识别到可用的图片';
-      if (res.unmatched.length) msg += '；未识别 ' + res.unmatched.length + ' 张（文件名带 01~11 或水果名即可自动分配）';
-      UI.toast(msg, res.assigned.length ? 'ok' : 'bad');
-    });
-  }
-
-  function exportPack() {
-    var info = assets.info();
-    if (!info.filled) {
-      UI.toast('还没有导入任何水果图片，导出的包是空的', 'bad');
-      return;
-    }
-    var text = assets.exportPack();
-    var stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 16);
-    UI.download('suika-assets-' + stamp + '.json', text);
-    UI.toast('贴图包已导出（' + info.filled + ' 张，指纹 ' + info.fingerprint + '），把它发给我即可整合最终版', 'ok');
+  /** 打开/关闭「选图小窗口」 */
+  function openPicker(open) {
+    if (!picker) return;
+    var willOpen = open == null ? !picker.isOpen() : !!open;
+    if (willOpen) picker.open();
+    else picker.close();
   }
 
   /* ---------------- 事件绑定 ---------------- */
@@ -712,7 +639,7 @@
       } else if (e.key === 'r' || e.key === 'R') {
         startRound();
       } else if (e.key === 'Escape') {
-        openDrawer(false);
+        openPicker(false);
       }
     });
 
@@ -727,65 +654,10 @@
         UI.toast(prefs.sound ? '音效已打开' : '音效已关闭');
       });
     }
-    if (dom.workshop) {
-      dom.workshop.addEventListener('click', function () {
-        openDrawer();
-      });
-    }
-    if (dom.drawerClose) dom.drawerClose.addEventListener('click', function () { openDrawer(false); });
-    if (dom.scrim) dom.scrim.addEventListener('click', function () { openDrawer(false); });
-
-    if (dom.fileSlot) {
-      dom.fileSlot.addEventListener('change', function () {
-        pickSlotFile(dom.fileSlot.files);
-      });
-    }
-    if (dom.fileBatch) {
-      dom.fileBatch.addEventListener('change', function () {
-        pickBatch(dom.fileBatch.files);
-        dom.fileBatch.value = '';
-      });
-    }
-    if (dom.filePack) {
-      dom.filePack.addEventListener('change', function () {
-        pickPack(dom.filePack.files);
-        dom.filePack.value = '';
-      });
-    }
-
-    if (dom.batch) dom.batch.addEventListener('click', function () { dom.fileBatch && dom.fileBatch.click(); });
-    if (dom.importPack) dom.importPack.addEventListener('click', function () { dom.filePack && dom.filePack.click(); });
-    if (dom.exportPack) dom.exportPack.addEventListener('click', exportPack);
-    if (dom.clearAssets) {
-      dom.clearAssets.addEventListener('click', function () {
-        if (!assets.info().filled) {
-          UI.toast('现在没有导入任何贴图');
-          return;
-        }
-        if (root.confirm('确定清除所有已导入的水果贴图，回到默认 emoji 外观吗？')) {
-          assets.clearAll();
-          UI.toast('已清除全部贴图', 'ok');
-        }
-      });
-    }
-    if (dom.lockBtn) {
-      dom.lockBtn.addEventListener('click', function () {
-        var info = assets.info();
-        if (info.customLocked) {
-          if (root.confirm('解锁后可以继续修改图片，确定解锁吗？')) {
-            assets.setLocked(false);
-            UI.toast('已解锁，可以继续修改贴图');
-          }
-          return;
-        }
-        if (!info.filled) {
-          UI.toast('还没有导入图片，先导入再锁定吧', 'bad');
-          return;
-        }
-        if (root.confirm('锁定后这份贴图会被视为「最终提交版本」。确定锁定吗？（锁定只是标记，真正的不可修改是整合进最终版后）')) {
-          assets.setLocked(true);
-          UI.toast('已标记为最终版，记得导出贴图包交给我', 'ok');
-        }
+    // 选图小窗口
+    if (dom.pickerBtn) {
+      dom.pickerBtn.addEventListener('click', function () {
+        openPicker();
       });
     }
 
@@ -831,22 +703,6 @@
       });
     }
 
-    var wrap = dom.canvas.parentNode;
-    if (wrap) {
-      ['dragenter', 'dragover'].forEach(function (ev) {
-        wrap.addEventListener(ev, function (e) {
-          e.preventDefault();
-        });
-      });
-      wrap.addEventListener('drop', function (e) {
-        e.preventDefault();
-        var files = e.dataTransfer && e.dataTransfer.files;
-        if (!files || !files.length) return;
-        if (/\.json$/i.test(files[0].name)) pickPack(files);
-        else pickBatch(files);
-      });
-    }
-
     root.addEventListener('resize', function () {
       setAim(aimX);
     });
@@ -868,20 +724,7 @@
     dom.pause = UI.el('btn-pause');
     dom.restart = UI.el('btn-restart');
     dom.sound = UI.el('btn-sound');
-    dom.workshop = UI.el('btn-workshop');
-    dom.drawer = UI.el('drawer');
-    dom.drawerClose = UI.el('drawer-close');
-    dom.scrim = UI.el('scrim');
-    dom.slots = UI.el('slots');
-    dom.assetStatus = UI.el('asset-status');
-    dom.batch = UI.el('btn-batch');
-    dom.importPack = UI.el('btn-import-pack');
-    dom.exportPack = UI.el('btn-export-pack');
-    dom.clearAssets = UI.el('btn-clear-assets');
-    dom.lockBtn = UI.el('btn-lock');
-    dom.fileSlot = UI.el('file-slot');
-    dom.fileBatch = UI.el('file-batch');
-    dom.filePack = UI.el('file-pack');
+    dom.pickerBtn = UI.el('btn-picker');
     dom.lbList = UI.el('lb-list');
     dom.lbClear = UI.el('lb-clear');
     dom.lbNote = UI.el('lb-note');
@@ -925,7 +768,8 @@
         ' 分钟自动刷新）。' +
         (root.SUIKA_STANDALONE ? '' : '用「启动游戏.cmd」打开也一样是全球榜。') +
         '</li>' +
-        '<li>水果图片可以在「贴图工坊」里导入，导好之后导出贴图包交给我，就能整合成最终版。</li>' +
+        '<li>水果图片来自内置图库：点右上角 <b>🖼 选图</b> 打开小窗口，从图库里挑 11 张放进水果位'
+        + '（图片不用自己导入）。</li>' +
         '</ul>',
       actions: [{ label: '开始游戏', kind: 'primary', onClick: startRound }]
     });
@@ -977,35 +821,6 @@
     syncHud();
   }
 
-  /** 演示用贴图：11 张「圆形+等级数字」的图片，用来检查贴图渲染链路（?demo=1&panel=1） */
-  function demoArtPack() {
-    if (!D.createElement) return;
-    var slots = [];
-    CFG.TIERS.forEach(function (t) {
-      var c = D.createElement('canvas');
-      c.width = 300; // 故意用非正方形的图，顺便验证等比裁切
-      c.height = 200;
-      var g = c.getContext('2d');
-      var grd = g.createLinearGradient(0, 20, 0, 180);
-      grd.addColorStop(0, '#ffffff');
-      grd.addColorStop(1, t.color);
-      g.fillStyle = grd;
-      g.beginPath();
-      g.ellipse(150, 100, 94, 94, 0, 0, Math.PI * 2);
-      g.fill();
-      g.lineWidth = 8;
-      g.strokeStyle = t.edge;
-      g.stroke();
-      g.fillStyle = t.edge;
-      g.font = '700 104px "PingFang SC","Microsoft YaHei",sans-serif';
-      g.textAlign = 'center';
-      g.textBaseline = 'middle';
-      g.fillText(String(t.tier), 150, 106);
-      slots.push({ tier: t.tier, key: t.key, name: t.name, file: CFG.suggestFileName(t), dataUrl: c.toDataURL('image/png') });
-    });
-    assets.importPack({ slots: slots });
-  }
-
   function boot() {
     cacheDom();
     demoMode = /[?&]demo=1/.test(root.location.search);
@@ -1015,6 +830,13 @@
 
     prefs = Object.assign({ sound: true, player: '玩家', difficulty: CFG.DEFAULT_DIFFICULTY }, loadJson(CFG.STORAGE_KEYS.prefs, {}));
     prefs.difficulty = CFG.clampDifficulty(prefs.difficulty);
+
+    // ?demo=1&lib=demo ：还没有真图时，生成一个「多分组 + 不同尺寸」的占位图库，
+    // 用来验证选图窗口（真图片内嵌进来之后就不需要它了）
+    var demoLib = demoMode && !/[?&]lib=none/.test(root.location.search);
+    if (demoLib && root.SuikaPicker && root.SuikaPicker.buildDemoLibrary) {
+      root.SuikaPicker.buildDemoLibrary();
+    }
 
     assets = AS.create({ storage: store });
     game = EN.create({ difficulty: prefs.difficulty });
@@ -1072,8 +894,6 @@
 
     UI.buildChain(dom.chain, assets);
     UI.updateChain(dom.chain, 1, {});
-    UI.renderSlots(dom.slots, slotOpts());
-    UI.renderAssetStatus(dom.assetStatus, assets.info());
     renderBoardView();
     if (dom.lbNote) {
       dom.lbNote.innerHTML =
@@ -1085,6 +905,15 @@
     }
 
     syncDiffUi();
+    // 选图小窗口（图片全部来自内嵌图库，不做导入）
+    picker = root.SuikaPicker.create({
+      assets: assets,
+      ui: UI,
+      onChanged: function () {
+        // 换图后：进化表色块、HUD 预览、画布上的水果都要跟着变
+        refreshAssetViews();
+      }
+    });
     wire();
     showReadyOverlay();
     syncHud();
@@ -1116,10 +945,11 @@
         game.setDifficulty(prefs.difficulty);
         syncDiffUi();
       }
+      // ?demo=1&panel=1 ：演示用，直接打开选图窗口
       if (/[?&]panel=1/.test(root.location.search)) {
-        demoArtPack();
-        if (dom.drawer) dom.drawer.style.transition = 'none'; // 演示用：跳过滑入动画，方便直接看全貌
-        openDrawer(true);
+        openPicker(true);
+        // ?demo=1&panel=1&close=1 ：再试一次关闭 → 没选满就会弹出提醒（自检/截图用）
+        if (/[?&]close=1/.test(root.location.search)) openPicker(false);
       }
       demoSeed();
       // ?demo=1&over=1 ：直接演示「本局结束 → 提交上榜」的流程
@@ -1127,6 +957,17 @@
       // ?demo=1&pump=120 ：同步跑 120 帧（≈2 秒），把 HUD/计时/同步倒计时这些
       // 「要跑一会儿才会执行到」的代码路径提前跑到 —— 自检和截图都用它，
       // 否则报错会发生在截图之后，看不到。
+      // ?demo=1&squash=0.28 ：把所有水果置成「正在被压」的状态并重绘一帧，
+      // 用来给截图/自检看挤压形变（真实游戏里这是撞出来的，不是摆出来的）
+      var sm = /[?&]squash=([\d.]+)/.exec(root.location.search);
+      if (sm) {
+        var kk = Math.min(CFG.RULES.jelly.squashMax, parseFloat(sm[1]) || 0.25);
+        game.fruits().forEach(function (f, i) {
+          f.suikaSq = kk;
+          f.suikaSqA = i % 2 === 0 ? 0 : Math.PI / 2;
+        });
+        render.draw(buildFrame());
+      }
       var pm = /[?&]pump=(\d+)/.exec(root.location.search);
       if (pm) {
         var n = Math.min(900, Math.max(1, parseInt(pm[1], 10) || 120));

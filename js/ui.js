@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · 界面层
  * 只做「把数据画成 DOM」和「弹提示」，游戏逻辑不在这里。
  */
@@ -268,123 +268,8 @@
     }, 180);
   }
 
-  /* ---------------- 贴图工坊 ---------------- */
 
-  function renderSlots(container, opts) {
-    var assets = opts.assets;
-    if (!container) return;
-    container.innerHTML = '';
-    var locked = !assets.info().canEdit;
-    CFG.TIERS.forEach(function (t) {
-      var info = assets.slotInfo(t.tier);
-      var li = document.createElement('li');
-      li.className = 'slot';
-      li.dataset.tier = t.tier;
-      if (info) li.classList.add('has-custom');
-
-      var preview = document.createElement('div');
-      preview.className = 'slot-preview';
-      var img = assets.imageOf(t.tier);
-      if (img) {
-        var im = document.createElement('img');
-        im.src = img.src;
-        im.alt = t.name;
-        preview.appendChild(im);
-      } else {
-        preview.textContent = t.emoji;
-        preview.style.background = 'radial-gradient(circle at 32% 28%, ' + root.SuikaRender.lighten(t.color, 0.5) + ', ' + t.color + ' 62%, ' + t.edge + ')';
-      }
-
-      var meta = document.createElement('div');
-      meta.className = 'slot-meta';
-      var title = document.createElement('b');
-      title.textContent = 'Lv.' + t.tier + ' ' + t.name;
-      var sub = document.createElement('span');
-      sub.textContent = '建议 ' + CFG.suggestFileName(t) + ' · 直径 ' + t.r * 2 + 'px · 合成 +' + t.score + ' 分';
-      var src = document.createElement('em');
-      src.className = 'slot-src';
-      if (info && info.source === 'builtin') {
-        src.textContent = '已内嵌（最终版）' + (info.bytes ? ' · ' + formatBytes(info.bytes) : '');
-      } else if (info) {
-        src.textContent = '自定义 · ' + (info.file || '已导入') + (info.bytes ? ' · ' + formatBytes(info.bytes) : '');
-      } else {
-        src.textContent = '默认外观（未导入）';
-      }
-      meta.appendChild(title);
-      meta.appendChild(sub);
-      meta.appendChild(src);
-
-      var btns = document.createElement('div');
-      btns.className = 'slot-btns';
-      var pick = document.createElement('button');
-      pick.type = 'button';
-      pick.className = 'btn btn-mini';
-      pick.textContent = '选图片';
-      pick.disabled = locked;
-      pick.addEventListener('click', function () {
-        opts.onPick(t.tier);
-      });
-      var clear = document.createElement('button');
-      clear.type = 'button';
-      clear.className = 'btn btn-mini btn-ghost';
-      clear.textContent = '清除';
-      clear.disabled = locked || !info;
-      clear.addEventListener('click', function () {
-        opts.onClear(t.tier);
-      });
-      btns.appendChild(pick);
-      btns.appendChild(clear);
-
-      li.appendChild(preview);
-      li.appendChild(meta);
-      li.appendChild(btns);
-
-      if (!locked) {
-        ['dragenter', 'dragover'].forEach(function (ev) {
-          li.addEventListener(ev, function (e) {
-            e.preventDefault();
-            li.classList.add('is-drop');
-          });
-        });
-        ['dragleave', 'drop'].forEach(function (ev) {
-          li.addEventListener(ev, function () {
-            li.classList.remove('is-drop');
-          });
-        });
-        li.addEventListener('drop', function (e) {
-          e.preventDefault();
-          var files = e.dataTransfer && e.dataTransfer.files;
-          if (files && files.length) opts.onDropFiles(t.tier, files);
-        });
-      }
-      container.appendChild(li);
-    });
-  }
-
-  function renderAssetStatus(node, info) {
-    if (!node) return;
-    var modeText =
-      info.mode === 'builtin' ? '🔒 最终版内嵌贴图（不可修改）' : info.mode === 'custom' ? '✏️ 正在使用你导入的贴图' : '🎨 默认 emoji 外观（可以随时导入图片替换）';
-    node.innerHTML =
-      '<div class="status-line">' +
-      '<span class="status-mode">' +
-      modeText +
-      '</span>' +
-      '<span>已导入 ' +
-      info.filled +
-      '/11</span>' +
-      '<span>占用 ' +
-      formatBytes(info.bytes) +
-      '</span>' +
-      '<span>指纹 <code>' +
-      info.fingerprint +
-      '</code></span>' +
-      (info.integratedAt ? '<span>整合时间 ' + String(info.integratedAt).slice(0, 10) + '</span>' : '') +
-      '</div>' +
-      (info.customLocked && !info.locked ? '<div class="status-note">你已把当前贴图标记为「最终版」。再点一次锁定按钮可解锁继续修改。</div>' : '');
-  }
-
-  /* ---------------- 导出 ---------------- */
+  /* ---------------- 对外 ---------------- */
 
   root.SuikaUI = {
     el: el,
@@ -399,8 +284,6 @@
     updateChain: updateChain,
     renderLeaderboard: renderLeaderboard,
     showOverlay: showOverlay,
-    hideOverlay: hideOverlay,
-    renderSlots: renderSlots,
-    renderAssetStatus: renderAssetStatus
+    hideOverlay: hideOverlay
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

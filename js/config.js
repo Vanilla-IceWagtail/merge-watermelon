@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * 合成大西瓜 · 基础配置
  * 纯数据 + 纯函数，不依赖 DOM，可以直接在 node 下 require 做逻辑测试。
  * 想改水果顺序 / 半径 / 分值 / 难度 / 物理手感，只改这一个文件就够了。
@@ -9,7 +9,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  var VERSION = '0.3.0';
+  var VERSION = '0.4.0';
 
   /* 画布与场地（逻辑像素，渲染时按 devicePixelRatio 放大） */
   var BOARD = {
@@ -36,7 +36,7 @@
      */
     enableSleeping: false,
     fruit: {
-      restitution: 0.12,
+      restitution: 0.42,
       // 摩擦调小：圆水果之间应该互相打滑滚开，而不是像粘在一起
       friction: 0.1,
       frictionStatic: 0.16,
@@ -80,7 +80,43 @@
      * 倍率 = 1 + (连击数-1) * step，最高 maxMultiplier；
      * 实际加成取「倍率加成」和「每连击 +1 分」里更大的那个（保证小水果连击也有收益）。
      */
-    combo: { windowMs: 1000, step: 0.3, maxMultiplier: 2.5 }
+    combo: { windowMs: 1000, step: 0.3, maxMultiplier: 2.5 },
+
+    /*
+     * 果冻手感（QQ 弹弹）。
+     *
+     * 参考了 BigNaiWa（yhsome.github.io/BigNaiWa）的做法 —— 它把"果冻感"拆成两层，
+     * 两层互不干扰，所以既弹又稳：
+     *   ① 回弹：由 restitution 决定；但**低于 bounceThreshold 的接触完全不给弹性**，
+     *      这样堆叠静止时不会一直微弹（这是堆子"稳"的关键）。
+     *   ② 挤压形变：纯渲染层。刚体形状全程不变，只在画的时候沿撞击法线压扁、垂直方向拉长，
+     *      然后指数衰减。做成渲染层的好处是：物理绝不会被形变带得自激抖动。
+     *
+     * 单位说明：Matter.js 的速度是「像素/步」（60 步 = 1 秒），
+     * BigNaiWa 用像素/秒，所以它的 1500 对应我们这里 1500/60 = 25；
+     * 它的 55px/s 静止阈值对应 55/60 ≈ 0.92。
+     */
+    jelly: {
+      restitution: 0.42, // 球球弹性（它 0.38、墙地 0.45，取中间值）
+      bounceThreshold: 0.92, // 低于这个法向接近速度就不给弹性、也不算挤压
+      squashMax: 0.3, // 最大压扁比例（法线方向缩到 70%）
+      speedScale: 25, // k = 撞速 / speedScale，到这个速度就压满
+      squashDecay: 9, // 每秒衰减系数，τ≈111ms
+      stretch: 0.85, // 垂直方向的拉伸系数（拉伸略小于压缩）
+      popScale: 0.28, // 合成瞬间"弹出来"的放大比例
+      popMs: 220, // 弹出动画时长
+      /*
+       * 形变用**二阶弹簧-阻尼**（不是一条指数衰减）：
+       *   sqV += (-springK * sq - springC * sqV) * dt
+       *   sq  += sqV * dt
+       * 这样压扁之后会弹过头（变成微微拉长）、再回摆，晃 1~2 下停住 —— 更像果冻。
+       * springK=120 → ω≈11 rad/s（周期 ≈0.57s）；springC=11 → 阻尼比 ζ≈0.5（欠阻尼，过冲约 16%）。
+       * 显式欧拉在 dt=1/60 下 ω·dt≈0.18，稳定。
+       */
+      springK: 120,
+      springC: 11,
+      stretchMax: 0.18 // 反向（拉长）时的上限，避免晃得太夸张
+    }
   };
 
   /* 难度：1~10 级，默认第 5 级（比原来的 4 级难一档） */
@@ -212,7 +248,7 @@
     return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  /** 给贴图工坊用的建议文件名，例如 01-cherry.png */
+  /** 建议的文件名，例如 01-cherry.png（内嵌图库时按这个给图片起名最省事） */
   function suggestFileName(t) {
     return (t.tier < 10 ? '0' + t.tier : '' + t.tier) + '-' + t.key + '.png';
   }

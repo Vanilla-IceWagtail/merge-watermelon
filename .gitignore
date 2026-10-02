@@ -6,3 +6,7 @@ data/
 Thumbs.db
 desktop.ini
 *.log
+
+# 玩偶素材的中间处理文件（转换后的源图 / 验收拼图），成品在玩偶版仓库
+assets/library-bangdream/
+
